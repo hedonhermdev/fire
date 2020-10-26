@@ -1,0 +1,44 @@
+{
+    "page_title": {
+        "meta": {
+            "quantity": 1 
+        },
+        "title": "text"
+    },
+    "profile": {
+        "meta": {
+            "quantity": 1
+        },
+        "button_title": "text",
+        "image": "image",
+        "content_title": "text",
+        "content": "richtext",
+        "button_id": {
+            "content_type": "text",
+            "auto_generate_unique": true,
+            "hidden": true
+        }
+    },
+    "additional_tabs": {
+        "meta": {
+            "quantity": -1,
+            "title": "title"
+        },
+        "button_title": "text",
+        "content_title": "text",
+        "content": "richtext",
+        "button_id": {
+            "contentType": "text",
+            "auto_generate_unique": true,
+            "hidden": true
+        }
+    },
+    "contact": {
+        "meta": {
+            "quantity": 1
+        },
+        "email": "text",
+        "phone": "text",
+        "designation": "text"
+    }
+}
