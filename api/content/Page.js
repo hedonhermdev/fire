@@ -1,9 +1,5 @@
 const express = require('express')
 const Page = require('../../models/Page')
-const PageGroup = require('../../models/PageGroup')
-const PageTemplate = require('../../models/PageTemplate')
-
-const router = new express.Router()
 
 const createPage = async (req, res) => {
     const args = {
@@ -61,6 +57,9 @@ const deletePage = async (req, res) => {
 }
 
 
-
-router.get('/:id', createPage)
+const router = new express.Router()
+router.post('/:id', createPage)
 router.put('/:id', modifyPage)
+router.delete('/:id', deletePage)
+
+module.exports = router

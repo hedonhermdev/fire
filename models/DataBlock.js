@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Page = require('./Page')
 
 const dataBlockSchema = new mongoose.Schema({
     page: {
@@ -19,6 +20,10 @@ const dataBlockSchema = new mongoose.Schema({
         required: true
     }
 })
+
+dataBlockSchema.statics.allowedUpdates = function () {
+    return ['index', 'data']
+}
 
 const jsType = (type) => {
     switch (type) {
@@ -130,13 +135,40 @@ const compareWithTemplateHelper = (template, data) => {
 }
 
 dataBlockSchema.statics.compareWithTemplate = function (template, data) {
-    const isValid = compareWithTemplateHelper(template, data)
-    return isValid
+    return compareWithTemplateHelper(template, data)
 }
+
+dataBlockSchema.methods.validate = async function () {
+    const page = await Page.findById(this.page._id).populate('template')
+    if (!page) {
+        const err = new Error(`Page with id ${this.page._id} does not exist`)
+        err.status = 404
+        throw err
+    }
+
+    const pageTemplateData = page.template
+    const dataBlockTemplate = pageTemplateData[this.position]
+    if (!dataBlockTemplate) {
+        const err = new Error(`Position ${this.position} does not exist in template ${page.template.name}`)
+        err.status = 400
+        throw err
+    }
+
+    const dataIsValid = DataBlock.compareWithTemplate(dataBlockTemplate, this.data)
+    if (!dataIsValid) {
+        const err = new Error(`Invalid data structure`)
+        err.status = 400
+        throw err
+    }
+}
+
+dataBlockSchema.pre('save', async function (next) {
+    await this.validate()
+    next()
+})
 
 const DataBlock = mongoose.model('DataBlock', dataBlockSchema)
 module.exports = DataBlock
-
 
 
 ///////////// DON'T REMOVE YET
