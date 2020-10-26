@@ -58,7 +58,7 @@ const deletePage = async (req, res) => {
 
 
 const router = new express.Router()
-router.post('/:id', createPage)
+router.post('/', createPage)
 router.put('/:id', modifyPage)
 router.delete('/:id', deletePage)
 

@@ -138,7 +138,7 @@ dataBlockSchema.statics.compareWithTemplate = function (template, data) {
     return compareWithTemplateHelper(template, data)
 }
 
-dataBlockSchema.methods.validate = async function () {
+dataBlockSchema.methods.performValidation = async function () {
     const page = await Page.findById(this.page._id).populate('template')
     if (!page) {
         const err = new Error(`Page with id ${this.page._id} does not exist`)
@@ -163,7 +163,7 @@ dataBlockSchema.methods.validate = async function () {
 }
 
 dataBlockSchema.pre('save', async function (next) {
-    await this.validate()
+    await this.performValidation()
     next()
 })
 

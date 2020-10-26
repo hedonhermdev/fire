@@ -32,7 +32,7 @@ pageSchema.statics.allowedUpdates = () => {
     return ['name', 'active', 'parentGroup']
 }
 
-pageSchema.methods.validate = async function () {
+pageSchema.methods.performValidation = async function () {
     const err = new Error('bad request')
     err.status = 400
 
@@ -56,7 +56,7 @@ pageSchema.methods.validate = async function () {
 }
 
 pageSchema.pre('save', async function (next) {
-    await this.validate()
+    await this.performValidation()
 
     const pageGroup = await PageGroup.findById(this.parentGroup)
     let parentUrl = pageGroup ? pageGroup.baseUrl : ''
