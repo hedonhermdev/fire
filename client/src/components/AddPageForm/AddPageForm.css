@@ -1,0 +1,76 @@
+.AddPageForm {
+    width: 75vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 1.5rem;
+    margin: 8px 32px;
+}
+
+.AddPageForm h2 {
+    color: #343F44;
+    font-weight: 500;
+}
+
+.AddPageForm .FieldWrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.AddPageForm label {
+    color: #343F44;
+    white-space: nowrap;
+}
+
+.AddPageForm label:nth-of-type(1) {
+    color: #343F44;
+}
+
+.AddPageForm input[type=text], .AddPageForm textarea, .AddPageForm select {
+    background: transparent;
+    border: 1px solid #dedede;
+    padding: 8px 16px;
+    color: #343F44;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    font-size: 0.75em;
+}
+
+.AddPageForm .FieldWrapper label {
+    margin-right: 36px;
+}
+
+.AddPageForm input[type=radio] {
+    margin-right: 12px;
+}
+
+.AddPageForm input:focus, .AddPageForm textarea:focus, .AddPageForm select:focus {
+    border: 1px solid #3160D5;
+}
+
+.AddPageForm textarea {
+    height: 10rem;
+}
+
+.AddPageForm button {
+    margin: 0 8px;
+    outline: none;
+    border: 3px solid #3160D5;
+    color: #3160D5;
+    font-size: 1.25rem;
+    background: transparent;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.AddPageForm button:hover {
+    border: 3px solid transparent;
+    background: #3160D5;
+    color: #ffffff;
+}

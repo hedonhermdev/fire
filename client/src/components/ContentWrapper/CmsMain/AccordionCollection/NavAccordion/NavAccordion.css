@@ -1,0 +1,61 @@
+.AccordionWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.AccordionWrapper .Accordion {
+    width: 95%;
+    margin: 8px 0;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #262d7030;
+    box-shadow: 0 0 10px #999999;
+}
+
+.AccordionWrapper .Accordion .AccordionTab {
+    width: 100%;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    background: #262d7030;
+    color: #333333;
+    font-size: 1.25em;
+    padding: 8px 24px;
+    transition: 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.AccordionWrapper .Accordion .AccordionTab:hover {
+    background: #262e70;
+    color: #ffffff;
+}
+
+.AccordionWrapper .Accordion .AccordionControl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AccordionWrapper .Accordion .AccordionTab .AddDescription {
+    font-size: 0.55em;
+    margin-right: 24px;
+    border: 2px solid #ffffff;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: 0.25s;
+}
+
+.AccordionPanel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 24px 0;
+    box-sizing: border-box;;
+}

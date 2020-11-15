@@ -1,0 +1,42 @@
+.SideTab {
+    width: 100%;
+}
+
+.SideTab > div > img {
+    height: 20px;
+    display: block;
+}
+
+.SideTab span {
+    display: inline-block;
+    color: #343F44;
+    font-size: 1.25em;
+    padding: 8px 0;
+    margin-left: 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.SubTab {
+    display: block;
+    width: 100%;
+    color: #343F44;
+    font-size: 1.25em;
+    padding: 10px 0;
+    padding-left: 64px;
+    margin-top: 4px;
+    box-sizing: border-box;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.SubTab.active {
+    color: #ffffff;
+    background: #3160D5;
+}
+
+.SubTab:hover {
+    color: #ffffff;
+    background: #3160D5;
+}
