@@ -1,5 +1,4 @@
-// import React, { Component } from 'react'
-// import _ from 'lodash'
+import React, { Component } from 'react'
 
 const generateFormObject = (formData, formStructure) => {
     const form = formData
@@ -47,45 +46,50 @@ const generateFormObject = (formData, formStructure) => {
     return newForm
 }
 
-class ContentBlockForm extends Component {
-    render() {
-        const form = []
-    
-        Object.keys(this.props.formData).forEach((key) => {
-            const val = formData[key]
-            if (typeof val === 'string') {
-                const field =  (
-                    <div>
-                        {key}
-                        <input
-                            onChange = {(e) => this.props.updateVal(`${this.props.path}.${key}`, e.target.value)}
-                            value = {_.get(this.props, `formData.${this.props.path}.${key}._value`, "bruh")}
-                        />
-                    </div>
-                )
-                form.push(field)
-            }
-            else if (Array.isArray(val)) {
-                val.forEach((formVal) => {
-                    const field = (
-                        <ContentBlockForm
-                            formData = {formVal}
-                        />
-                    )
-                })
-            }
-        })
-    
-        return (
-            <div>
-                {form}
-            </div>
-        )
+const PageEditForm = (props) => {
+    const { data, template } = props
+    const formData = generateFormObject(data, template)
 
-    }
+    return <ContentBlockForm formData={formData}/>
 }
 
-export default contentBlockForm
+const ContentBlockForm = (props) => {
+    const { formData, path } = props
+    console.log(formData)
+
+    const form = []
+    Object.entries(formData).forEach(([key, val]) => {
+        if (typeof val !== 'string' && !Array.isArray(val)) {
+            const field = (
+                <div>
+                    {key}<br></br>
+                    <input
+                        onChange = {(e) => console.log(e.target.value)}
+                    />
+                </div>
+            )
+            form.push(field)
+        }
+        else if (Array.isArray(val)) {
+            val.forEach((formVal) => {
+                const field = (
+                    <ContentBlockForm
+                        formData = {formVal}
+                    />
+                )
+                form.push(field)
+            })
+        }
+    })
+
+    return (
+        <div>
+            {form}
+        </div>
+    )
+}
+
+export default PageEditForm
 
 
 // const template = {
