@@ -65,6 +65,7 @@ const ContentBlockForm = (props) => {
                     {key}<br></br>
                     <input
                         onChange = {(e) => console.log(e.target.value)}
+                        value = {val._value}
                     />
                 </div>
             )
@@ -83,7 +84,13 @@ const ContentBlockForm = (props) => {
     })
 
     return (
-        <div>
+        <div
+            style={{
+                border: "1px solid black",
+                margin: "15px",
+                padding: "15px"
+            }}>
+            <strong>{formData._accordionTitle}</strong>
             {form}
         </div>
     )
