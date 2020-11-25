@@ -128,7 +128,7 @@ const ContentBlockForm = (props) => {
     return (
         <div
             style={{
-                border: "1px solid black",
+                // border: "1px solid black",
                 margin: "15px",
                 padding: "15px"
             }}>

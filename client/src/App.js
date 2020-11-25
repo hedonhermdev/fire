@@ -12,6 +12,7 @@ import EditPageForm from "./components/EditPageForm/EditPageForm";
 import AddPageGroupForm from "./components/AddPageGroupForm/AddPageGroupForm";
 import EditPageGroupForm from "./components/EditPageGroupForm/EditPageGroupForm";
 import PageEditForm from './components/PageEditForm/PageEditForm'
+import Accordion from './components/PageEditForm/Accordion/Accordion'
 
 
 // class App extends React.Component {
@@ -110,7 +111,15 @@ const data = {
 class App extends React.Component {
   render() {
     return (
-      <PageEditForm data={data} template={template} />
+      // <PageEditForm data={data} template={template} />
+      <div>
+        <Accordion title="test yayayayayayaya this is an accordion">
+          <p>Henlo</p>
+        </Accordion>
+        <Accordion title="test yayayayayayaya this is an accordion">
+          <p>Henlo</p>
+        </Accordion>
+      </div>
     );
   }
 }
