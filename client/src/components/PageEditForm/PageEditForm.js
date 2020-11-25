@@ -128,14 +128,14 @@ const ContentBlockForm = (props) => {
     })
 
     return (
-        <Accordion title="Content Block">
+        <Accordion title={formData._accordionTitle}>
             <div
                 style={{
                     // border: "1px solid black",
                     margin: "15px",
                     padding: "15px"
                 }}>
-                <strong>{formData._accordionTitle}</strong>
+                {/* <strong>{formData._accordionTitle}</strong> */}
                 {form}
             </div>
         </Accordion>

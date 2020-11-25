@@ -36,22 +36,6 @@ const Accordion = (props) => {
             <div className={`accordion ${activeClass}`} onClick={toggleAccordion}>
                 <p className="accordion__title">{props.title}</p>
             </div>
-            {/* <div
-                ref={content}
-                className="accordion_content"
-                style = {{
-                    maxHeight: height,
-                    height: "auto",
-                    overflow: "hidden",
-                    transition: "max-height 0.9s ease",
-                    backgroundColor: "#efefef",
-                    border: "1px solid #ccc"
-                }}
-            >
-                <div>
-                    {props.children}
-                </div>
-            </div> */}
             <div
                 style={{
                     backgroundColor: "aqua"
