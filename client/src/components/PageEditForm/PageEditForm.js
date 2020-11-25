@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState, createContext } from 'react'
+import update from 'immutability-helper'
+import _, { create } from 'lodash'
 
 const generateFormObject = (formData, formStructure) => {
     const form = formData
@@ -46,25 +48,62 @@ const generateFormObject = (formData, formStructure) => {
     return newForm
 }
 
+const generateUpdateFromPath = (path, updateVal) => {
+    const keys = path.split('.')
+    const updateObj = {}
+    let curr = updateObj
+
+    keys.forEach((key) => {
+        curr[key] = {}
+        curr = curr[key]
+    })
+    
+    curr["$set"] = updateVal
+    return updateObj
+}
+
+// const path = 'info.name.first'
+// const val = 'dushyant'
+// const obj = generateUpdateFromPath(path, val)
+// console.log(JSON.stringify(obj))
+
+
 const PageEditForm = (props) => {
     const { data, template } = props
     const formData = generateFormObject(data, template)
 
-    return <ContentBlockForm formData={formData}/>
+    const [formState, setFormState] = useState(formData)
+
+    const updateFormData = (updateObj) => {
+        const newFormState = update(formState, updateObj)
+        setFormState(newFormState)
+    }
+
+    return <ContentBlockForm
+                formData={formState}
+                path={''}
+                onUpdate={updateFormData}
+            />
 }
 
 const ContentBlockForm = (props) => {
     const { formData, path } = props
-    console.log(formData)
 
     const form = []
+
+    const onFieldChange = (e, key) => {
+        const updatePath = path === '' ? `${key}._value` : `${path}.${key}._value`
+        const updateObj = generateUpdateFromPath(updatePath, e.target.value)
+        props.onUpdate(updateObj)
+    } 
+
     Object.entries(formData).forEach(([key, val]) => {
         if (typeof val !== 'string' && !Array.isArray(val)) {
             const field = (
                 <div>
                     {key}<br></br>
                     <input
-                        onChange = {(e) => console.log(e.target.value)}
+                        onChange = {(e) => onFieldChange(e, key)}
                         value = {val._value}
                     />
                 </div>
@@ -72,10 +111,13 @@ const ContentBlockForm = (props) => {
             form.push(field)
         }
         else if (Array.isArray(val)) {
-            val.forEach((formVal) => {
+            val.forEach((formVal, index) => {
+                const nextPath = (path === '') ? `${key}.${index}` : `${path}.${key}.${index}`
                 const field = (
                     <ContentBlockForm
                         formData = {formVal}
+                        path = {nextPath}
+                        onUpdate = {props.onUpdate}
                     />
                 )
                 form.push(field)
