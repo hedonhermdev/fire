@@ -111,15 +111,18 @@ const data = {
 class App extends React.Component {
   render() {
     return (
-      // <PageEditForm data={data} template={template} />
       <div>
-        <Accordion title="test yayayayayayaya this is an accordion">
-          <p>Henlo</p>
-        </Accordion>
-        <Accordion title="test yayayayayayaya this is an accordion">
-          <p>Henlo</p>
-        </Accordion>
+        <PageEditForm data={data} template={template} />
+        <PageEditForm data={data} template={template} />
       </div>
+      // <div>
+      //   <Accordion title="test yayayayayayaya this is an accordion">
+      //     <p>Henlo</p>
+      //   </Accordion>
+      //   <Accordion title="test yayayayayayaya this is an accordion">
+      //     <p>Henlo</p>
+      //   </Accordion>
+      // </div>
     );
   }
 }

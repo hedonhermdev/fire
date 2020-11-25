@@ -2,6 +2,8 @@ import React, { useState, createContext } from 'react'
 import update from 'immutability-helper'
 import _, { create } from 'lodash'
 
+import Accordion from './Accordion/Accordion'
+
 const generateFormObject = (formData, formStructure) => {
     const form = formData
     const newForm = {}
@@ -126,15 +128,17 @@ const ContentBlockForm = (props) => {
     })
 
     return (
-        <div
-            style={{
-                // border: "1px solid black",
-                margin: "15px",
-                padding: "15px"
-            }}>
-            <strong>{formData._accordionTitle}</strong>
-            {form}
-        </div>
+        <Accordion title="Content Block">
+            <div
+                style={{
+                    // border: "1px solid black",
+                    margin: "15px",
+                    padding: "15px"
+                }}>
+                <strong>{formData._accordionTitle}</strong>
+                {form}
+            </div>
+        </Accordion>
     )
 }
 
