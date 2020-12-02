@@ -1,0 +1,29 @@
+.RichTextField textarea {
+    border: 1px solid black
+}
+
+
+
+.RichTextField__field {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: var(--input-maxwidth);
+}
+
+.ck-editor__editable {
+    min-height: 300px;
+    /* max-width: var(--input-maxwidth) */
+}
+
+:root {
+    --input-maxwidth: 90%;
+    --ck-color-focus-border: transparent;
+    /* Overrides the border radius setting in the theme. */
+    --ck-border-radius: 5px;
+
+    /* Overrides the default font size in the theme. */
+    --ck-font-size-base: 14px;
+
+    --ck-color-shadow-drop: none;
+    --ck-color-shadow-inner: none;
+}

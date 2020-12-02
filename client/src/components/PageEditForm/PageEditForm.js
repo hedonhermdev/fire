@@ -214,7 +214,7 @@ const ContentBlockForm = (props) => {
                     <RichTextField
                         title={key}
                         value={val._value}
-                        onChange={(text, medium) => onFieldChange(text, key)}
+                        onChange={(text) => onFieldChange(text, key)}
                     />
                 )
             }

@@ -2,17 +2,21 @@ import React, { Component } from 'react'
 
 import CKEditor from '@ckeditor/ckeditor5-react';
 import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
-// import BalloonEditor from '@ckeditor/ckeditor5-build-classic';
+
+import './RichTextField.css'
 
 const RichTextField = (props) => {
     return (
-        <div>
+        <div className="RichTextField">
             {props.title}
             <br/>
-            <CKEditor
-                editor={BalloonEditor}
-                data={props.value}
-            />
+            <div className="RichTextField__field">
+                <CKEditor
+                    editor={BalloonEditor}
+                    data={props.value}
+                    onChange={(event, editor) => props.onChange(editor.getData())}
+                />
+            </div>
         </div>
     )
 }
