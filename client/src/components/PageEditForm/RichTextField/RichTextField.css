@@ -1,5 +1,5 @@
-.RichTextField textarea {
-    border: 1px solid black
+.RichTextField {
+    margin-bottom: 15px;
 }
 
 
@@ -8,6 +8,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     max-width: var(--input-maxwidth);
+    background-color: white;
 }
 
 .ck-editor__editable {

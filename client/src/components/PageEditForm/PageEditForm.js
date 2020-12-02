@@ -241,7 +241,7 @@ const ContentBlockForm = (props) => {
     })
 
     const content = (
-        <div>
+        <div style={{backgroundColor: "#fff"}}>
             <div
                 style={{
                     padding: "15px"

@@ -39,7 +39,6 @@ const Accordion = (props) => {
                     display: "flex",
                     flexDirection: "column",
                     width: width,
-                    // margin: "15px 0px",
                     transition: "width 0.2s ease"
                 }}
             >
@@ -68,8 +67,6 @@ const Accordion = (props) => {
             </div>
         )
     }
-
-    console.log("bruh")
 
     return (
         <Draggable
@@ -104,7 +101,9 @@ const Accordion = (props) => {
                         <div
                             style={{
                                 // backgroundColor: "aqua"
-                                border: `1px solid ${borderColor}`
+                                // border: `1px solid ${borderColor}`,
+                                boxShadow: `${active ? "0px 4px 8px 4px #eee" : 'none'}`,
+                                zIndex: 0
                             }}
                         >
                             <AnimateHeight
