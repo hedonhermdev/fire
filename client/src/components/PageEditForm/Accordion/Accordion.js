@@ -94,7 +94,7 @@ const Accordion = (props) => {
                             <p className="accordion__title">{props.title}</p>
                             <div className={"accordion__control"}>
                                 <div {...provided.dragHandleProps}>
-                                    <FaGripVertical/>
+                                    <FaGripVertical color={active ? "1098f7" : "#888"}/>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@ const Accordion = (props) => {
                             style={{
                                 // backgroundColor: "aqua"
                                 // border: `1px solid ${borderColor}`,
-                                boxShadow: `${active ? "0px 4px 8px 4px #eee" : 'none'}`,
+                                boxShadow: `${active ? "0px 4px 16px 4px #799ab11f" : 'none'}`,
                                 zIndex: 0
                             }}
                         >
