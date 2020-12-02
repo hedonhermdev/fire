@@ -103,6 +103,10 @@ const data = {
       {
           interest: "AI/ML",
           papers: "0"
+      },
+      {
+          interest: "AI/ML",
+          papers: "0"
       }
   ]
 }
@@ -111,9 +115,9 @@ const data = {
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <PageEditForm data={data} template={template} />
-        <PageEditForm data={data} template={template} />
+      <div style={{padding: "15px"}}>
+        <PageEditForm data={data} template={template} index={0} />
+        {/* <PageEditForm data={data} template={template} index={1}/> */}
       </div>
       // <div>
       //   <Accordion title="test yayayayayayaya this is an accordion">

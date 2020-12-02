@@ -1,10 +1,14 @@
 import React, { useState, createContext } from 'react'
 import update from 'immutability-helper'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import _, { create } from 'lodash'
 
 import Accordion from './Accordion/Accordion'
+import TextField from './TextField/TextField'
 
-const generateFormObject = (formData, formStructure) => {
+import "./PageEditForm.css"
+
+function generateFormObject(formData, formStructure) {
     const form = formData
     const newForm = {}
     const meta = formStructure._meta
@@ -50,7 +54,33 @@ const generateFormObject = (formData, formStructure) => {
     return newForm
 }
 
-const generateUpdateFromPath = (path, updateVal) => {
+function generateFormData(formObject, formStructure) {
+    const formData = {}
+    Object.entries(formObject).forEach(([key, val]) => {
+        if (key === '_accordionTitle') {
+            return
+        }
+
+        if (val._value) {
+            formData[key] = val._value
+        }
+        else {
+            if (formStructure[key]._meta.quantity === 1
+                || formStructure[key]._meta.quantity === undefined) {
+                    formData[key] = generateFormData(val[0], formStructure[key])
+            }
+            else {
+                const vals = []
+                val.forEach((v) => vals.push(generateFormData(v, formStructure[key])))
+                formData[key] = vals
+            }
+        }
+    })
+
+    return formData
+}
+
+function generateUpdateFromPath(path, updateVal) {
     const keys = path.split('.')
     const updateObj = {}
     let curr = updateObj
@@ -64,10 +94,15 @@ const generateUpdateFromPath = (path, updateVal) => {
     return updateObj
 }
 
-// const path = 'info.name.first'
-// const val = 'dushyant'
-// const obj = generateUpdateFromPath(path, val)
-// console.log(JSON.stringify(obj))
+function reorder(list, startIndex, endIndex) {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+
+    return result
+}
+
+
 
 
 const PageEditForm = (props) => {
@@ -81,11 +116,74 @@ const PageEditForm = (props) => {
         setFormState(newFormState)
     }
 
-    return <ContentBlockForm
+    return (
+            <ContentBlockForm
                 formData={formState}
                 path={''}
                 onUpdate={updateFormData}
+                onSave={() => {console.log(generateFormData(formState, template))}}
+                index={props.index}
+                root
             />
+    )
+}
+
+const ContentBlockFormList = (props) => {
+    const { formDataList, path, title } = props
+    const form = [...formDataList]
+
+    if (!Array.isArray(formDataList)) {
+        console.log("What the fuck?")
+        return
+    }
+
+    function onDragEnd(result) {
+        if (!result.destination) {
+            return
+        }
+
+        if (result.destination.index === result.source.index) {
+            return
+        }
+
+        const newFormDataList = reorder(
+            formDataList,
+            result.source.index,
+            result.destination.index
+        )
+        const updateObj = generateUpdateFromPath(path, newFormDataList)
+        props.onUpdate(updateObj)
+    }
+
+    return (
+        <DragDropContext onDragEnd={onDragEnd}>
+            <div>
+                {title}
+            </div>
+            <Droppable droppableId="list">
+                {(provided, snapshot) => (
+                    <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                    >
+                        {formDataList.map((formData, index) => {
+                            const nextPath = (path === '') ? `${index}` : `${path}.${index}`
+                            return (
+                                <ContentBlockForm
+                                    formData={formData}
+                                    path={nextPath}
+                                    onUpdate={props.onUpdate}
+                                    index={index}
+                                />
+                            )
+                        })}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+        </DragDropContext>
+    )
+
 }
 
 const ContentBlockForm = (props) => {
@@ -103,41 +201,56 @@ const ContentBlockForm = (props) => {
         if (typeof val !== 'string' && !Array.isArray(val)) {
             const field = (
                 <div>
-                    {key}<br></br>
-                    <input
-                        onChange = {(e) => onFieldChange(e, key)}
+                    <TextField
+                        title={key}
                         value = {val._value}
+                        onChange = {(e) => onFieldChange(e, key)}
                     />
                 </div>
             )
             form.push(field)
         }
         else if (Array.isArray(val)) {
-            val.forEach((formVal, index) => {
-                const nextPath = (path === '') ? `${key}.${index}` : `${path}.${key}.${index}`
-                const field = (
-                    <ContentBlockForm
-                        formData = {formVal}
-                        path = {nextPath}
-                        onUpdate = {props.onUpdate}
-                    />
-                )
-                form.push(field)
-            })
+            const nextPath = (path === '') ? key : `${path}.${key}`
+            const field = (
+                <ContentBlockFormList
+                    formDataList={val}
+                    path={nextPath}
+                    title={key}
+                    onUpdate={props.onUpdate}
+                />
+            )
+            form.push(field)
         }
     })
 
     return (
-        <Accordion title={formData._accordionTitle}>
+        <Accordion
+            title={formData._accordionTitle}
+            id={props.index.toString()}
+            index={props.index}
+            draggable={!props.root}
+        >
             <div
                 style={{
-                    // border: "1px solid black",
-                    margin: "15px",
+                    // margin: "15px",
+                    // backgroundColor: "red",
                     padding: "15px"
                 }}>
-                {/* <strong>{formData._accordionTitle}</strong> */}
+
                 {form}
+                
             </div>
+            {
+            props.root
+            ?   <div
+                    className="FormSaveButton"
+                    onClick={props.onSave}
+                >
+                    Save
+                </div>
+            : null
+            }
         </Accordion>
     )
 }
@@ -181,4 +294,12 @@ export default PageEditForm
 
 // const testData = generateFormObject(data, template)
 // console.log(testData)
+// const original = generateFormData(testData, template)
+// console.log(original)
 // console.log(JSON.stringify(testData))
+
+
+// const path = 'info.name.first'
+// const val = 'dushyant'
+// const obj = generateUpdateFromPath(path, val)
+// console.log(JSON.stringify(obj))

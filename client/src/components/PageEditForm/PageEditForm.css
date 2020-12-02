@@ -1,0 +1,12 @@
+.FormSaveButton {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    height: 30px;
+    cursor: pointer;
+}
