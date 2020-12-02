@@ -87,7 +87,14 @@ const template = {
           title: "interest"
       },
       interest: "text",
-      papers: "text"
+      papers: {
+        _meta: {
+          quantity: -1,
+          title: "title"
+        },
+        title: "text",
+        link: "text"
+      }
   }
 }
 
@@ -98,15 +105,42 @@ const data = {
   additional: [
       {
           interest: "SDN",
-          papers: "5"
+          papers: [
+            {
+              title: "Paper A",
+              link: "google.com"
+            },
+            {
+              title: "Paper B",
+              link: "facebook.com"
+            }
+          ]
       },
       {
           interest: "AI/ML",
-          papers: "0"
+          papers: [
+            {
+              title: "Paper A",
+              link: "google.com"
+            },
+            {
+              title: "Paper B",
+              link: "facebook.com"
+            }
+          ]
       },
       {
-          interest: "AI/ML",
-          papers: "0"
+          interest: "Blockchain",
+          papers: [
+            {
+              title: "Paper A",
+              link: "google.com"
+            },
+            {
+              title: "Paper B",
+              link: "facebook.com"
+            }
+          ]
       }
   ]
 }

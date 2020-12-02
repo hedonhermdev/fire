@@ -157,7 +157,9 @@ const ContentBlockFormList = (props) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div>
+            <div style={{
+                marginBottom: "15px"
+            }}>
                 {title}
             </div>
             <Droppable droppableId="list">
@@ -224,17 +226,10 @@ const ContentBlockForm = (props) => {
         }
     })
 
-    return (
-        <Accordion
-            title={formData._accordionTitle}
-            id={props.index.toString()}
-            index={props.index}
-            draggable={!props.root}
-        >
+    const content = (
+        <div>
             <div
                 style={{
-                    // margin: "15px",
-                    // backgroundColor: "red",
                     padding: "15px"
                 }}>
 
@@ -251,6 +246,21 @@ const ContentBlockForm = (props) => {
                 </div>
             : null
             }
+        </div>
+    )
+
+    if (props.root) {
+        return content
+    }
+
+    return (
+        <Accordion
+            title={formData._accordionTitle}
+            id={props.index.toString()}
+            index={props.index}
+            draggable={!props.root}
+        >
+            {content}
         </Accordion>
     )
 }
