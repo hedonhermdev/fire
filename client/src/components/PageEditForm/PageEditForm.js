@@ -5,6 +5,7 @@ import _, { create } from 'lodash'
 
 import Accordion from './Accordion/Accordion'
 import TextField from './TextField/TextField'
+import RichTextField from './RichTextField/RichTextField'
 
 import "./PageEditForm.css"
 
@@ -193,23 +194,36 @@ const ContentBlockForm = (props) => {
 
     const form = []
 
-    const onFieldChange = (e, key) => {
+    const onFieldChange = (value, key) => {
         const updatePath = path === '' ? `${key}._value` : `${path}.${key}._value`
-        const updateObj = generateUpdateFromPath(updatePath, e.target.value)
+        const updateObj = generateUpdateFromPath(updatePath, value)
         props.onUpdate(updateObj)
     } 
 
     Object.entries(formData).forEach(([key, val]) => {
         if (typeof val !== 'string' && !Array.isArray(val)) {
+            let inputField = (
+                <TextField
+                    title={key}
+                    value = {val._value}
+                    onChange = {(e) => onFieldChange(e.target.value, key)}
+                />
+            )
+            if (val._type === 'richtext') {
+                inputField = (
+                    <RichTextField
+                        title={key}
+                        value={val._value}
+                        onChange={(text, medium) => onFieldChange(text, key)}
+                    />
+                )
+            }
             const field = (
                 <div>
-                    <TextField
-                        title={key}
-                        value = {val._value}
-                        onChange = {(e) => onFieldChange(e, key)}
-                    />
+                    {inputField}
                 </div>
             )
+            
             form.push(field)
         }
         else if (Array.isArray(val)) {
