@@ -3,12 +3,14 @@ import React, { Component } from 'react'
 import CKEditor from '@ckeditor/ckeditor5-react';
 import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 
+import prettifyLabel from '../../../utils/prettifyLabel'
+
 import './RichTextField.css'
 
 const RichTextField = (props) => {
     return (
         <div className="RichTextField">
-            {props.title}
+            {prettifyLabel(props.title)}
             <br/>
             <div className="RichTextField__field">
                 <CKEditor

@@ -1,10 +1,12 @@
 import React from 'react'
+import prettifyLabel from '../../../utils/prettifyLabel'
+
 import "./TextField.css"
 
 const TextField = (props) => {
     return (
         <div className="textfield">
-            {props.title}<br/>
+            {prettifyLabel(props.title)}<br/>
             <input
                 value={props.value}
                 onChange={props.onChange}

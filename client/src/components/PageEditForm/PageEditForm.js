@@ -7,6 +7,8 @@ import Accordion from './Accordion/Accordion'
 import TextField from './TextField/TextField'
 import RichTextField from './RichTextField/RichTextField'
 
+import prettifyLabel from '../../utils/prettifyLabel'
+
 import "./PageEditForm.css"
 
 function generateFormObject(formData, formStructure) {
@@ -104,8 +106,6 @@ function reorder(list, startIndex, endIndex) {
 }
 
 
-
-
 const PageEditForm = (props) => {
     const { data, template } = props
     const formData = generateFormObject(data, template)
@@ -161,7 +161,7 @@ const ContentBlockFormList = (props) => {
             <div style={{
                 marginBottom: "15px"
             }}>
-                {title}
+                {prettifyLabel(title)}
             </div>
             <Droppable droppableId="list">
                 {(provided, snapshot) => (
