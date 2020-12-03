@@ -219,6 +219,13 @@ const ContentBlockFormList = (props) => {
         props.onUpdate(updateObj)
     }
 
+    function onDelete(index) {
+        const newFormDataList = [...formDataList]
+        newFormDataList.splice(index, 1)
+        const updateObj = generateUpdateFromPath(path, newFormDataList)
+        props.onUpdate(updateObj)
+    }
+
     let marginTop = "30px"
     if (level === 0) {
         marginTop = "50px"
@@ -283,6 +290,8 @@ const ContentBlockFormList = (props) => {
                                     template={template}
                                     path={nextPath}
                                     onUpdate={props.onUpdate}
+                                    onDelete={onDelete}
+                                    deleteable={deleteable}
                                     index={index}
                                 />
                             )
@@ -299,7 +308,7 @@ const ContentBlockFormList = (props) => {
 
 
 const ContentBlockForm = (props) => {
-    const { formData, path, level, template } = props
+    const { formData, path, level, template, deleteable } = props
 
     const form = []
 
@@ -365,14 +374,24 @@ const ContentBlockForm = (props) => {
                 
             </div>
             {
-            props.root
-            ?   <div
-                    className="FormSaveButton"
-                    onClick={props.onSave}
-                >
-                    Save
-                </div>
-            : null
+                props.root
+                ?   <div
+                        className="FormSaveButton"
+                        onClick={props.onSave}
+                    >
+                        Save
+                    </div>
+                : null
+            }
+            {
+                deleteable
+                ?   <div
+                        className="AccordionDeleteButton"
+                        onClick={() => props.onDelete(props.index)}
+                    >
+                        Delete
+                    </div>
+                : null
             }
         </div>
     )
