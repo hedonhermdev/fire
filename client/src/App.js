@@ -83,13 +83,16 @@ const template = {
   content: "richtext",
   additional: {
       _meta: {
-          quantity: 2,
+          quantity: {
+            min: 2,
+            max: 4
+          },
           title: "interest"
       },
       interest: "text",
       papers: {
         _meta: {
-          quantity: -1,
+          quantity: 2,
           title: "title"
         },
         title: "text",

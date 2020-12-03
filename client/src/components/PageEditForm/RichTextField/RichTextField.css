@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap");
+
 .RichTextField {
     margin-bottom: 15px;
 }
@@ -9,6 +11,9 @@
     border-radius: 5px;
     max-width: var(--input-maxwidth);
     background-color: white;
+    margin-top: 4px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
 }
 
 .ck-editor__editable {

@@ -10,3 +10,22 @@
     height: 30px;
     cursor: pointer;
 }
+
+.AccordionAddBtn {
+    color: #506f85c7;
+    background-color: #506f852d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+    height: 30px;
+    margin: auto 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.AccordionAddBtn:hover {
+    background-color: #506f8542;
+}

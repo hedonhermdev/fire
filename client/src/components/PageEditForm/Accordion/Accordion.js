@@ -85,17 +85,16 @@ const Accordion = (props) => {
                             display: "flex",
                             flexDirection: "column",
                             width: width,
-                            // marginBottom: "15px",
+                            borderRadius: "5px",
+                            boxShadow: "0px 0px 8px 4px #799ab11f",
                             transition: "width 0.2s ease"
                         }}
                     >
                         
                         <div className={`accordion ${activeClass}`} onClick={toggleAccordion}>
                             <p className="accordion__title">{props.title}</p>
-                            <div className={"accordion__control"}>
-                                <div {...provided.dragHandleProps}>
+                            <div className="accordion__control" {...provided.dragHandleProps}>
                                     <FaGripVertical color={active ? "1098f7" : "#888"}/>
-                                </div>
                             </div>
                         </div>
                         <div

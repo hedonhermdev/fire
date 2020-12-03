@@ -3,13 +3,15 @@ import update from 'immutability-helper'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import _, { create } from 'lodash'
 
+import { FaPlus } from 'react-icons/fa'
+
 import Accordion from './Accordion/Accordion'
 import TextField from './TextField/TextField'
 import RichTextField from './RichTextField/RichTextField'
-
-import prettifyLabel from '../../utils/prettifyLabel'
+import Label from './Label/Label'
 
 import "./PageEditForm.css"
+
 
 function generateFormObject(formData, formStructure) {
     const form = formData
@@ -105,6 +107,50 @@ function reorder(list, startIndex, endIndex) {
     return result
 }
 
+function createNewDataObject(template) {
+    const result = {}
+    Object.entries(template).forEach(([key, val]) => {
+        if (key === '_meta') {
+            return
+        }
+
+        if (typeof val === "string") {
+            result[key] = {
+                _type: val,
+                _value: "bruh"
+            }
+            return
+        }
+        else if (typeof val === 'object' && val.contentType) {
+            result[key] = {
+                _type: val.contentType,
+                _value: "bruh"
+            }
+        }
+        else {
+            const quantity = val._meta.quantity
+            let iterations = 1
+            if (typeof quantity === 'number' && quantity !== -1) {
+                iterations = quantity
+            }
+            else {
+                if (quantity.min) {
+                    iterations = quantity.min
+                }
+            }
+            const newSubData = []
+            for (let i = 0; i < iterations; i++) {
+                newSubData.push(createNewDataObject(val))
+            }
+            result[key] = newSubData
+        }
+    })
+
+    result._accordionTitle = result[template._meta.title]._value
+
+    return result
+}
+
 
 const PageEditForm = (props) => {
     const { data, template } = props
@@ -117,20 +163,30 @@ const PageEditForm = (props) => {
         setFormState(newFormState)
     }
 
+    console.log(formState)
+
+    const bruh = createNewDataObject(template)
+    console.log(bruh)
+
     return (
             <ContentBlockForm
                 formData={formState}
+                template={template}
                 path={''}
                 onUpdate={updateFormData}
                 onSave={() => {console.log(generateFormData(formState, template))}}
                 index={props.index}
+                level={0}
                 root
             />
     )
 }
 
+
+
+
 const ContentBlockFormList = (props) => {
-    const { formDataList, path, title } = props
+    const { formDataList, path, title, level, template } = props
     const form = [...formDataList]
 
     if (!Array.isArray(formDataList)) {
@@ -156,12 +212,61 @@ const ContentBlockFormList = (props) => {
         props.onUpdate(updateObj)
     }
 
+    function onAdd() {
+        const newDataObject = createNewDataObject(template)
+        const newFormDataList = formDataList.concat(newDataObject)
+        const updateObj = generateUpdateFromPath(path, newFormDataList)
+        props.onUpdate(updateObj)
+    }
+
+    let marginTop = "30px"
+    if (level === 0) {
+        marginTop = "50px"
+    }
+
+    // Deciding whether or not we should allow adding more objects
+    // or deleting any objects, based on quantity constraints in the
+    // template
+    let showAdd = false
+    let deleteable = false 
+
+    const { quantity } = template._meta
+    if (typeof quantity === 'number') {
+        if (quantity === -1) {
+            showAdd = true
+            deleteable = true
+        }
+        else {
+            showAdd = (formDataList.length < quantity)
+            deleteable = (formDataList.length > quantity)
+        }
+    }
+    else if (typeof quantity === 'object') {
+        const { max, min } = quantity
+        showAdd = (!max) || (max && formDataList.length < max)
+        deleteable = (!min) || (min && formDataList.length > min)
+    }
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div style={{
-                marginBottom: "15px"
+                marginBottom: "15px",
+                marginTop: marginTop,
+                // backgroundColor: "green",
+                width: "75%",
+                display: "flex",
+                justifyContent: "space-between"
+                // flexDirection: "column"
             }}>
-                {prettifyLabel(title)}
+                <Label value={title} level={level} bold/>
+                {showAdd 
+                ? <div
+                    className="AccordionAddBtn"
+                    onClick={onAdd}
+                >
+                    <FaPlus/>
+                </div>
+                : null}
             </div>
             <Droppable droppableId="list">
                 {(provided, snapshot) => (
@@ -173,7 +278,9 @@ const ContentBlockFormList = (props) => {
                             const nextPath = (path === '') ? `${index}` : `${path}.${index}`
                             return (
                                 <ContentBlockForm
+                                    level={level+1}
                                     formData={formData}
+                                    template={template}
                                     path={nextPath}
                                     onUpdate={props.onUpdate}
                                     index={index}
@@ -186,11 +293,13 @@ const ContentBlockFormList = (props) => {
             </Droppable>
         </DragDropContext>
     )
-
 }
 
+
+
+
 const ContentBlockForm = (props) => {
-    const { formData, path } = props
+    const { formData, path, level, template } = props
 
     const form = []
 
@@ -204,6 +313,7 @@ const ContentBlockForm = (props) => {
         if (typeof val !== 'string' && !Array.isArray(val)) {
             let inputField = (
                 <TextField
+                    level={level}
                     title={key}
                     value = {val._value}
                     onChange = {(e) => onFieldChange(e.target.value, key)}
@@ -212,6 +322,7 @@ const ContentBlockForm = (props) => {
             if (val._type === 'richtext') {
                 inputField = (
                     <RichTextField
+                        level={level}
                         title={key}
                         value={val._value}
                         onChange={(text) => onFieldChange(text, key)}
@@ -227,10 +338,13 @@ const ContentBlockForm = (props) => {
             form.push(field)
         }
         else if (Array.isArray(val)) {
+            const nextTemplate = template[key]
             const nextPath = (path === '') ? key : `${path}.${key}`
             const field = (
                 <ContentBlockFormList
+                    level={level}
                     formDataList={val}
+                    template={nextTemplate}
                     path={nextPath}
                     title={key}
                     onUpdate={props.onUpdate}

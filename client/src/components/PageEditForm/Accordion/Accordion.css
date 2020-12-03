@@ -16,18 +16,18 @@
 
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
+  /* background-color: #58788f21; */
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0px 0px 8px 4px #799ab11f;
-  /* background-color: green; */
+  /* box-shadow: 0px 0px 8px 4px #799ab11f; */
   color: #444;
   cursor: pointer;
-  padding: 0px 18px;
+  padding: 0px 0px 0px 18px;
   display: flex;
-  /* align-items: center; */
-  border: none;
+  /* border: none; */
+  /* border: 1px solid #799ab18e; */
   outline: none;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.1s ease;
   justify-content: space-between;
   /* flex-direction: column; */
 }
@@ -40,7 +40,7 @@
 .active {
   background-color: #1098f7;
   color: white;
-  box-shadow: 0px 0px 8px 4px #58788f21;
+  /* box-shadow: 0px 0px 8px 4px #58788f21; */
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   /* background-color: yellow; */
@@ -59,8 +59,8 @@
   /* background-color: aqua; */
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
-  /* width: 50px; */
+  justify-content: center;
+  width: 50px;
   /* float: right; */
 }
 
