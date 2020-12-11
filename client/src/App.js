@@ -156,14 +156,7 @@ class App extends React.Component {
         <PageEditForm data={data} template={template} index={0} />
         {/* <PageEditForm data={data} template={template} index={1}/> */}
       </div>
-      // <div>
-      //   <Accordion title="test yayayayayayaya this is an accordion">
-      //     <p>Henlo</p>
-      //   </Accordion>
-      //   <Accordion title="test yayayayayayaya this is an accordion">
-      //     <p>Henlo</p>
-      //   </Accordion>
-      // </div>
+
     );
   }
 }

@@ -29,7 +29,7 @@ const pageSchema = new mongoose.Schema({
 })
 
 pageSchema.statics.allowedUpdates = () => {
-    return ['name', 'active', 'parentGroup']
+    return ['name', 'active']
 }
 
 pageSchema.methods.performValidation = async function () {
@@ -55,23 +55,27 @@ pageSchema.methods.performValidation = async function () {
     }
 }
 
-pageSchema.pre('save', async function (next) {
-    await this.performValidation()
+pageSchema.methods.getUrl = async function() {
+    if (!this.populated('parentGroup')) {
+        await this.populate('parentGroup').execPopulate()
+    }
 
-    const pageGroup = await PageGroup.findById(this.parentGroup)
-    let parentUrl = pageGroup ? pageGroup.baseUrl : ''
+    let parentUrl = this.parentGroup ? this.parentGroup.baseUrl : ''
 
     if (parentUrl === '') {
-        this.url = this.name
+        return this.name
     }
-    else {
-        if (this.name === 'index') {
-            this.url = parentUrl
-        }
-        else {
-            this.url = `${parentUrl}/${this.name}`
-        }
+    
+    if (this.name === 'index') {
+        return parentUrl
     }
+
+    return `${parentUrl}/${this.name}`
+}
+
+pageSchema.pre('save', async function (next) {
+    await this.performValidation()
+    this.url = await this.getUrl()
     next()
 })
 
