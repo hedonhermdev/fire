@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const PageGroup = require('./PageGroup')
-const PageTemplate = require('./PageTemplate')
+const DataBlockTemplate = require('./DataBlockTemplate')
 
 const pageSchema = new mongoose.Schema({
     name: {
@@ -16,15 +16,14 @@ const pageSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    template: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'PageTemplate',
-        required: true
-    },
     parentGroup: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PageGroup',
         default: null
+    },
+    data: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DataBlock'
     }
 })
 
@@ -37,7 +36,7 @@ pageSchema.methods.performValidation = async function () {
     err.status = 400
 
     if (this.isModified('template')) {
-        const templateExists = await PageTemplate.exists({ _id: this.template })
+        const templateExists = await DataBlockTemplate.exists({ _id: this.template })
         if (!templateExists) {
             err.message = `Template with id ${this.template.toString()} does not exist`
             throw err

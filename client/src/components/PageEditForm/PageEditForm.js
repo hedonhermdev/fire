@@ -16,9 +16,14 @@ import "./PageEditForm.css"
 function generateFormObject(formData, formStructure) {
     const form = formData
     const newForm = {}
-    const meta = formStructure._meta
+    let meta = formStructure._meta
+    if (!meta) {
+        meta = {
+            quantity: 1
+        }
+    }
 
-    newForm._accordionTitle = formData[meta.title]
+    newForm._accordionTitle = meta.title ? formData[meta.title] : "DataBlock"
 
     Object.keys(formData).forEach((key) => {
         if (key === '_meta' || key == '_accordionTitle') {
@@ -61,6 +66,12 @@ function generateFormObject(formData, formStructure) {
 
 function generateFormData(formObject, formStructure) {
     const formData = {}
+    if (!formStructure._meta) {
+        formStructure._meta = {
+            quantity: 1
+        }
+    }
+    
     Object.entries(formObject).forEach(([key, val]) => {
         if (key === '_accordionTitle') {
             return
@@ -109,6 +120,12 @@ function reorder(list, startIndex, endIndex) {
 
 function createNewDataObject(template) {
     const result = {}
+    if (!template._meta) {
+        template._meta = {
+            quantity: 1
+        }
+    }
+
     Object.entries(template).forEach(([key, val]) => {
         if (key === '_meta') {
             return
@@ -146,7 +163,7 @@ function createNewDataObject(template) {
         }
     })
 
-    result._accordionTitle = result[template._meta.title]._value
+    result._accordionTitle = template._meta.title ? result[template._meta.title]._value : "DataBlock"
 
     return result
 }

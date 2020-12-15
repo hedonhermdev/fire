@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 require('../src/db/mongoose')
-const PageTemplate = require('../src/models/PageTemplate')
+const DataBlockTemplate = require('../src/models/DataBlockTemplate')
 const PageGroupTemplate = require('../src/models/PageGroupTemplate')
 
 const pageTemplateDir = path.join(__dirname, '../meta/pageTemplates')
@@ -22,16 +22,21 @@ const getFileList = (dir, ext) => {
 }
 
 const setPageTemplateData = async (name, data) => {
-    const pageTemplate = await PageTemplate.findOne({ name })
+    if (!data._meta) {
+        data._meta = {
+            quantity: 1
+        }
+    }
+    const pageTemplate = await DataBlockTemplate.findOne({ name })
     if (!pageTemplate) {
-        const pgTemplate = new PageTemplate({ name, data })
+        const pgTemplate = new DataBlockTemplate({ name, data })
         await pgTemplate.save()
-        console.log(`Created PageTemplate ${name}`)
+        console.log(`Created DataBlockTemplate ${name}`)
         return
     }
 
     if (JSON.stringify(data) === JSON.stringify(pageTemplate.data)) {
-        console.log(`No change in PageTemplate ${name}`)
+        console.log(`No change in DataBlockTemplate ${name}`)
         return
     }
 
@@ -41,7 +46,7 @@ const setPageTemplateData = async (name, data) => {
         console.log(`Updated Page Template ${name}`)
     }
     catch (e) {
-        console.log(`Unable to populate PageTemplate ${name}`)
+        console.log(`Unable to populate DataBlockTemplate ${name}`)
     }
 }
 
@@ -87,7 +92,7 @@ const loadPageGroupTemplates = async (dir) => {
 
 const run = async () => {
     await loadPageTemplates(pageTemplateDir)
-    await loadPageGroupTemplates(pageGroupTemplateDir)
+    // await loadPageGroupTemplates(pageGroupTemplateDir)
 }
 
 run()

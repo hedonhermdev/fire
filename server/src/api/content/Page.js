@@ -1,5 +1,7 @@
 const express = require('express')
 const Page = require('../../models/Page')
+const DataBlock = require('../../models/DataBlock')
+const DataBlockTemplate = require('../../models/DataBlockTemplate')
 
 const getPage = async (req, res) => {
     const page = await Page.findById(req.params.id)
@@ -25,21 +27,26 @@ const createPage = async (req, res) => {
 
     try {
         const page = new Page(args)
-        let parentGroup = null
-        if (args.parentGroup) {
-            page.parentGroup = args.parentGroup
-            await page.populate('parentGroup').execPopulate()
-            parentGroup = page.parentGroup
-        }
-
-        parentGroup.pages = parentGroup.pages.concat(page._id)
+        await page.populate('parentGroup').execPopulate()
+        const parentGroup = page.parentGroup
+        
         page.url = await page.getUrl()
 
-        await parentGroup.save()
+        const dataBlockTemplate = await DataBlockTemplate.findById(args.template)
+        const pageData = DataBlock.createFromTemplate(dataBlockTemplate)
+        page.data = pageData
+        await pageData.save()
+
+        if (parentGroup) {
+            parentGroup.pages = parentGroup.pages.concat(page._id)
+            await parentGroup.save()
+        }
+        
         await page.save()
         return res.status(201).send(page)
     }
     catch (e) {
+        console.log(e)
         return res.status(e.status || 500).send(e)
     }
 }
@@ -76,7 +83,7 @@ const deletePage = async (req, res) => {
                 message: `Page with id ${req.params.id} does not exist`
             })
         }
-        
+
         const parentGroup = page.parentGroup
         if (parentGroup) {
             parentGroup.pages = parentGroup.pages.filter(

@@ -1,22 +1,15 @@
+const { create } = require('lodash')
 const mongoose = require('mongoose')
-const Page = require('./Page')
+const DataBlockTemplate = require('./DataBlockTemplate')
 
 const dataBlockSchema = new mongoose.Schema({
-    page: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
-    position: {
-        type: String,
-        required: true
-    },
-    index: {
-        type: Number,
-        required: true,
-        default: 0
-    },
     data: {
         type: Object,
+        required: true
+    },
+    template: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DataBlockTemplate',
         required: true
     }
 })
@@ -39,7 +32,6 @@ const compareWithTemplateHelper = (template, data) => {
 
     for (let i = 0; i < templateKeys.length; i++) {
         let key = templateKeys[i]
-
         // Ignore the _meta attribute
         if (key === '_meta') {
             continue
@@ -138,18 +130,69 @@ dataBlockSchema.statics.compareWithTemplate = function (template, data) {
     return compareWithTemplateHelper(template, data)
 }
 
-dataBlockSchema.methods.performValidation = async function () {
-    const page = await Page.findById(this.page._id).populate('template')
-    if (!page) {
-        const err = new Error(`Page with id ${this.page._id} does not exist`)
-        err.status = 404
-        throw err
+function createFromTemplateHelper (template) {
+    const result = {}
+    
+    // because the first level will not have a meta field
+    if (!template._meta) {
+        template._meta = {
+            quantity: 1
+        }
     }
 
-    const pageTemplateData = page.template
-    const dataBlockTemplate = pageTemplateData[this.position]
-    if (!dataBlockTemplate) {
-        const err = new Error(`Position ${this.position} does not exist in template ${page.template.name}`)
+    Object.entries(template).forEach(([key, val]) => {
+        if (key === '_meta') {
+            return
+
+        }
+        
+        if ((typeof val === 'string') ||
+            (typeof val === 'object' && val.contentType)) {
+            return result[key] = ""
+        }
+
+        const meta = val._meta
+        const quantity = meta.quantity
+        if (quantity === 1) {
+            return result[key] = createFromTemplateHelper(val)
+        }
+
+        let iterations = 1
+        if (typeof quantity === 'number' && quantity !== -1) {
+            iterations = quantity
+        }
+        else if (typeof quantity.min === 'number') {
+            iterations = quantity.min
+        }
+        const newSubData = []
+        for (let i = 0; i < iterations; i++) {
+            newSubData.push(createFromTemplateHelper(val))
+        }
+        return result[key] = newSubData
+    })
+
+    return result
+}
+
+dataBlockSchema.statics.createFromTemplate = function (template) {
+    // console.log(template)
+    // console.log("BRUHHHH", template._id)
+    // console.log(template.data)
+    const data = createFromTemplateHelper(template.data)
+    const datablock = new DataBlock({ data, template: template })
+    return datablock
+}
+
+
+dataBlockSchema.methods.performValidation = async function () {
+    console.log(this)
+
+    if (!this.populated('template')) {
+        await this.populate('template').execPopulate()
+    }
+    const dataBlockTemplate = this.template.data
+    if (!this.template) {
+        const err = new Error('Datablock Template not found')
         err.status = 400
         throw err
     }
@@ -196,6 +239,9 @@ module.exports = DataBlock
 //         }
 //     }
 // }
+
+// const res = createFromTemplateHelper(template)
+// console.log(res)
 
 // const data = {
 //     name: '',
