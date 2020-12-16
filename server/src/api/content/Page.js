@@ -4,7 +4,14 @@ const DataBlock = require('../../models/DataBlock')
 const DataBlockTemplate = require('../../models/DataBlockTemplate')
 
 const getPage = async (req, res) => {
-    const page = await Page.findById(req.params.id)
+    const page = await Page.findById(req.params.id).populate({
+        path: 'dataBlock',
+        select: 'data template',
+        populate: {
+            path: 'template',
+            select: 'structure'
+        }
+    })
     if (!page) {
         return res.status(404).send({
             message: `Page with id ${req.params.id} does not exist`
@@ -34,7 +41,7 @@ const createPage = async (req, res) => {
 
         const dataBlockTemplate = await DataBlockTemplate.findById(args.template)
         const pageData = DataBlock.createFromTemplate(dataBlockTemplate)
-        page.data = pageData
+        page.dataBlock = pageData
         await pageData.save()
 
         if (parentGroup) {

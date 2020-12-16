@@ -6,8 +6,7 @@ const pageGroupSchema = new mongoose.Schema({
         required: true
     },
     baseUrl: {
-        type: String,
-        required: true
+        type: String
     },
     parentGroup: {
         type: mongoose.Schema.Types.ObjectId,
@@ -47,14 +46,19 @@ pageGroupSchema.statics.withPopulatedData = async function(query) {
 
 pageGroupSchema.methods.getBaseUrl = async function() {
     if (!this.parentGroup) {
+        if (this.name = '__main') {
+            return ''
+        }
         return this.name
     }
-    
-    await this.populate({
-        path: 'parentGroup',
-        model: 'PageGroup',
-        select: 'baseUrl'
-    }).execPopulate()
+
+    if (!this.populated('parentGroup')) {
+        await this.populate({
+            path: 'parentGroup',
+            model: 'PageGroup',
+            select: 'baseUrl'
+        }).execPopulate()
+    }
 
     const parentUrl = this.parentGroup.baseUrl
     if (parentUrl === '') {

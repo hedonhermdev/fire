@@ -21,7 +21,7 @@ const pageSchema = new mongoose.Schema({
         ref: 'PageGroup',
         default: null
     },
-    data: {
+    dataBlock: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DataBlock'
     }
@@ -59,7 +59,10 @@ pageSchema.methods.getUrl = async function() {
         await this.populate('parentGroup').execPopulate()
     }
 
-    let parentUrl = this.parentGroup ? this.parentGroup.baseUrl : ''
+    let parentUrl = ''
+    if (this.parentGroup && this.parentGroup.name !== '__main') {
+        parentUrl = this.parentGroup.baseUrl
+    }
 
     if (parentUrl === '') {
         return this.name

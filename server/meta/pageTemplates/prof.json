@@ -1,10 +1,5 @@
 {
-    "page_title": {
-        "_meta": {
-            "quantity": 1 
-        },
-        "title": "text"
-    },
+    "page_title": "text",
     "profile": {
         "_meta": {
             "quantity": 1

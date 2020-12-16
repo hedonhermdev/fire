@@ -2,6 +2,9 @@ import React, { useState, createContext } from 'react'
 import update from 'immutability-helper'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import _, { create } from 'lodash'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import htmlToDraft from 'html-to-draftjs'
+import draftToHtml from 'draftjs-to-html'
 
 import { FaPlus } from 'react-icons/fa'
 
@@ -12,6 +15,22 @@ import Label from './Label/Label'
 
 import "./PageEditForm.css"
 
+function htmlToEditorState(html) {
+    const { contentBlocks, entityMap} = htmlToDraft(html)
+    return EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+            contentBlocks, entityMap
+        )
+    )
+}
+
+function editorStateToHtml(editorState) {
+    return draftToHtml(
+        convertToRaw(
+            editorState.getCurrentContent()
+        )
+    )
+}
 
 function generateFormObject(formData, formStructure) {
     const form = formData
@@ -30,6 +49,8 @@ function generateFormObject(formData, formStructure) {
             return
         }
         
+        // const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+
         const val = formData[key]
         
         if (typeof val === 'string') {
@@ -41,8 +62,13 @@ function generateFormObject(formData, formStructure) {
                 valueType = formStructure[key].contentType
             }
 
+            let value = val
+            if (valueType === 'richtext') {
+                value = htmlToEditorState(value)
+            }
+
             const newVal = {
-                _value: val,
+                _value: value,
                 _type: valueType
             }
 
@@ -77,8 +103,14 @@ function generateFormData(formObject, formStructure) {
             return
         }
 
-        if (val._value) {
-            formData[key] = val._value
+        // Checking like this because we wanna allow empty strings
+        if (val._value !== undefined && val._value !== null) {
+            let value = val._value
+            if (val._type === 'richtext') {
+                value = editorStateToHtml(value)
+                console.log('value is', value)
+            }
+            formData[key] = value
         }
         else {
             if (formStructure[key]._meta.quantity === 1
@@ -132,16 +164,24 @@ function createNewDataObject(template) {
         }
 
         if (typeof val === "string") {
+            let value = "bruh"
+            if (val === 'richtext') {
+                value = htmlToEditorState(value)
+            }
             result[key] = {
                 _type: val,
-                _value: "bruh"
+                _value: value
             }
             return
         }
         else if (typeof val === 'object' && val.contentType) {
+            let value = 'bruh'
+            if (val.contentType === 'richtext') {
+                value = htmlToEditorState(value)
+            }
             result[key] = {
                 _type: val.contentType,
-                _value: "bruh"
+                _value: value
             }
         }
         else {
@@ -181,9 +221,6 @@ const PageEditForm = (props) => {
     }
 
     console.log(formState)
-
-    const bruh = createNewDataObject(template)
-    console.log(bruh)
 
     return (
             <ContentBlockForm
@@ -310,6 +347,7 @@ const ContentBlockFormList = (props) => {
                                     onDelete={onDelete}
                                     deleteable={deleteable}
                                     index={index}
+                                    id={index}
                                 />
                             )
                         })}
@@ -329,7 +367,7 @@ const ContentBlockForm = (props) => {
 
     const form = []
 
-    const onFieldChange = (value, key) => {
+    const onFieldChange = (value, key, isRichText=false) => {
         const updatePath = path === '' ? `${key}._value` : `${path}.${key}._value`
         const updateObj = generateUpdateFromPath(updatePath, value)
         props.onUpdate(updateObj)
@@ -351,7 +389,7 @@ const ContentBlockForm = (props) => {
                         level={level}
                         title={key}
                         value={val._value}
-                        onChange={(text) => onFieldChange(text, key)}
+                        onChange={(editorState) => onFieldChange(editorState, key)}
                     />
                 )
             }

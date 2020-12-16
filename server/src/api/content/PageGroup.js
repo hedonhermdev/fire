@@ -3,8 +3,23 @@ const Page = require('../../models/Page')
 const PageGroup = require('../../models/PageGroup')
 const PageGroupTemplate = require('../../models/PageGroupTemplate')
 
+const getRoot = async (req, res) => {
+    const pageGroup = await PageGroup.withPopulatedData(
+        PageGroup.findOne({ name: '__main' })
+    )
+    if (!pageGroup) {
+        return res.status(404).send({
+            message: 'No root page group found, boy someone fucked up'
+        })
+    }
+
+    return res.status(200).send(pageGroup)
+}
+
 const getPageGroup = async (req, res) => {
-    const pageGroup = await PageGroup.withPopulatedData(PageGroup.findById(req.params.id))
+    const pageGroup = await PageGroup.withPopulatedData(
+        PageGroup.findById(req.params.id)
+    )
     console.log(req.params.id)
     console.log(pageGroup)
     return res.status(200).send(pageGroup)
@@ -20,6 +35,7 @@ const createPageGroup = async (req, res) => {
 
     const pageGroup = new PageGroup(args)
     pageGroup.baseUrl = await pageGroup.getBaseUrl()
+    console.log('baseUrl', pageGroup.baseUrl === '')
 
     let parentGroup = null
     if (args.parentGroup) {
@@ -31,6 +47,7 @@ const createPageGroup = async (req, res) => {
         }
         console.log(parentGroup)
         parentGroup.pageGroups = parentGroup.pageGroups.concat(pageGroup._id)
+        await parentGroup.save()
     }
 
     let pgTemplate = null
@@ -46,7 +63,6 @@ const createPageGroup = async (req, res) => {
 
 
     await pageGroup.save()
-    await parentGroup.save()
     return res.status(201).send(pageGroup)
 }
 
@@ -95,6 +111,7 @@ const deletePageGroup = async (req, res) => {
 }
 
 const router = new express.Router()
+router.get('/root', getRoot)
 router.get('/:id', getPageGroup)
 router.post('/', createPageGroup)
 router.put('/:id', modifyPageGroup)

@@ -5,9 +5,14 @@ const datablockTemplateSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    data: {
+    structure: {
         type: Object,
         required: true
+    },
+    templateType: {
+        type: String,
+        enum: ['PAGE_GROUP', 'PAGE'],
+        default: 'PAGE'
     }
 })
 

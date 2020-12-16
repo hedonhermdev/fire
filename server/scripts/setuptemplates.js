@@ -21,27 +21,28 @@ const getFileList = (dir, ext) => {
     return fileList
 }
 
-const setPageTemplateData = async (name, data) => {
-    if (!data._meta) {
-        data._meta = {
+const setPageTemplateData = async (name, structure) => {
+    if (!structure._meta) {
+        structure._meta = {
             quantity: 1
         }
     }
     const pageTemplate = await DataBlockTemplate.findOne({ name })
     if (!pageTemplate) {
-        const pgTemplate = new DataBlockTemplate({ name, data })
+        const pgTemplate = new DataBlockTemplate({ name, structure, templateType: 'PAGE' })
         await pgTemplate.save()
         console.log(`Created DataBlockTemplate ${name}`)
         return
     }
 
-    if (JSON.stringify(data) === JSON.stringify(pageTemplate.data)) {
+    if (JSON.stringify(structure) === JSON.stringify(pageTemplate.structure)) {
         console.log(`No change in DataBlockTemplate ${name}`)
         return
     }
 
     try {
-        pageTemplate.data = data
+        pageTemplate.structure = structure
+        pageTemplate.templateType = 'PAGE'
         await pageTemplate.save()
         console.log(`Updated Page Template ${name}`)
     }

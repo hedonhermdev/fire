@@ -13,6 +13,7 @@ import './App.css';
 // import EditPageGroupForm from "./components/EditPageGroupForm/EditPageGroupForm";
 import PageEditForm from './components/PageEditForm/PageEditForm'
 import Accordion from './components/PageEditForm/Accordion/Accordion'
+import CMSMain from './screens/CMSMain/CMSMain'
 
 
 // class App extends React.Component {
@@ -152,11 +153,10 @@ const data = {
 class App extends React.Component {
   render() {
     return (
-      <div style={{padding: "15px"}}>
-        <PageEditForm data={data} template={template} index={0} />
-        {/* <PageEditForm data={data} template={template} index={1}/> */}
-      </div>
-
+      // <div style={{padding: "15px"}}>
+      //   <PageEditForm data={data} template={template} index={0} />
+      // </div>
+      <CMSMain/>
     );
   }
 }

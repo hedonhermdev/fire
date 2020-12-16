@@ -178,7 +178,7 @@ dataBlockSchema.statics.createFromTemplate = function (template) {
     // console.log(template)
     // console.log("BRUHHHH", template._id)
     // console.log(template.data)
-    const data = createFromTemplateHelper(template.data)
+    const data = createFromTemplateHelper(template.structure)
     const datablock = new DataBlock({ data, template: template })
     return datablock
 }
@@ -190,7 +190,7 @@ dataBlockSchema.methods.performValidation = async function () {
     if (!this.populated('template')) {
         await this.populate('template').execPopulate()
     }
-    const dataBlockTemplate = this.template.data
+    const dataBlockTemplate = this.template.structure
     if (!this.template) {
         const err = new Error('Datablock Template not found')
         err.status = 400

@@ -1,0 +1,10 @@
+.CMSMain {
+    /* background-color: green; */
+    height: 100vh;
+    display: flex;
+}
+
+.MainArea {
+    /* background-color: aqua; */
+    flex: 1 1 auto;
+}
