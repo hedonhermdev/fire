@@ -1,18 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-// import SideBar from './components/SideBar/SideBar';
-// import ContentWrapper from './components/ContentWrapper/ContentWrapper';
-// import Aux from './components/hoc/Aux/Aux';
-// import Login from './components/Login/Login';
-// import { Route, Redirect } from 'react-router-dom';
-// import Modal from './components/UI/Modal/Modal';
-// import AddPageForm from "./components/AddPageForm/AddPageForm";
-// import EditPageForm from "./components/EditPageForm/EditPageForm";
-// import AddPageGroupForm from "./components/AddPageGroupForm/AddPageGroupForm";
-// import EditPageGroupForm from "./components/EditPageGroupForm/EditPageGroupForm";
-import PageEditForm from './components/PageEditForm/PageEditForm'
-import Accordion from './components/PageEditForm/Accordion/Accordion'
 import CMSMain from './screens/CMSMain/CMSMain'
 
 

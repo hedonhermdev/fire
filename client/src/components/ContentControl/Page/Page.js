@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import PageEditForm from '../../PageEditForm/PageEditForm'
+import PageEditForm from '../PageEditForm/PageEditForm'
 import * as actions from '../../../store/actions/index'
 import './Page.css'
 
