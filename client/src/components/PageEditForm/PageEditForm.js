@@ -228,7 +228,7 @@ const PageEditForm = (props) => {
                 template={template}
                 path={''}
                 onUpdate={updateFormData}
-                onSave={() => {console.log(generateFormData(formState, template))}}
+                onSave={() => {props.onSave(generateFormData(formState, template))}}
                 index={props.index}
                 level={0}
                 root

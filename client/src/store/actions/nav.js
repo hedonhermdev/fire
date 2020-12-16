@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes'
+import * as actions from './index'
 import api from '../../axios'
 
 export const navBreadCrumbPush = (name, id) => {
@@ -16,12 +17,10 @@ const openEntityStart = () => {
     }
 }
 
-const openEntitySuccess = (data, entityType) => {
+const openEntitySuccess = () => {
     console.log('openEntitySuccess')
     return {
-        type: actionTypes.NAV_OPEN_ENTITY_SUCCESS,
-        data: data,
-        entityType: entityType
+        type: actionTypes.NAV_OPEN_ENTITY_SUCCESS
     }
 }
 
@@ -43,7 +42,8 @@ export const openRoot = () => {
                 let { name, _id } = response.data
                 name = (name === '__main') ? 'Home' : name
                 dispatch(navBreadCrumbPush(name, response.data._id))
-                dispatch(openEntitySuccess(response.data, 'PAGE_GROUP'))
+                dispatch(actions.setContent(response.data, 'PAGE_GROUP'))
+                dispatch(openEntitySuccess())
             })
             .catch((e) => {
                 console.log(e)
@@ -61,7 +61,8 @@ export const openEntity = ({ name, id, type, pushToBreadCrumb = true }) => {
                 if (pushToBreadCrumb) {
                     dispatch(navBreadCrumbPush(name, id))
                 }
-                dispatch(openEntitySuccess(response.data, type))
+                dispatch(actions.setContent(response.data, type))
+                dispatch(openEntitySuccess())
             })
             .catch((e) => {
                 console.log(e)

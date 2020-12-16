@@ -2,8 +2,6 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
     breadCrumb: [],
-    entityType: 'PAGE_GROUP',
-    data: {},
     loading: true,
     error: null
 }
@@ -26,8 +24,6 @@ const openEntityFail = (state, action) => {
 const openEntity = (state, action) => {
     return {
         ...state,
-        entityType: action.entityType,
-        data: action.data,
         loading: false
     }
 }
@@ -64,7 +60,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.NAV_OPEN_ENTITY_FAIL: return openEntityFail(state, action)
         case actionTypes.NAV_BREADCRUMB_PUSH: return breadCrumbPush(state, action)
         case actionTypes.NAV_BREADCRUMB_SET: return setBreadCrumb(state, action)
-        default: return initialState
+        default: return state
     }
 }
 

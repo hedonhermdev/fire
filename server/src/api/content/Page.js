@@ -109,10 +109,25 @@ const deletePage = async (req, res) => {
     }
 }
 
+const updateData = async (req, res) => {
+    try {
+        const page = await Page.findById(req.params.id).populate('dataBlock')
+        const dataBlock = page.dataBlock
+        dataBlock.data = req.body.data
+        console.log(req.body)
+        await dataBlock.save()
+        return res.status(200).send(page)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).send(e)
+    }
+}
+
 
 const router = new express.Router()
 router.get('/:id', getPage)
 router.post('/', createPage)
+router.post('/updateData/:id', updateData)
 router.put('/:id', modifyPage)
 router.delete('/:id', deletePage)
 

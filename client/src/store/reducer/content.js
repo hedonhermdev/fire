@@ -1,55 +1,52 @@
-import * as content from '../actions/content';
+import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
-    activePageGroupPK: null,
-    formData: null,
-    positionMap: null,
-    updateContent: false
+    entityType: 'PAGE_GROUP',
+    data: {},
+    loading: 'true',
+    error: null
 }
 
-const contents = (state = initialState, action) => {
-    const { type } = action;
-
-    if (type === content.CHANGE_ACTIVE_PAGE_GROUP_PK) {
-        return {
-            ...state,
-            activePageGroupPK: action.activePageGroupPK
-        }
+const saveContentStart = (state, action) => {
+    const newDatablock = {
+        ...state.data.dataBlock,
+        data: action.data
     }
-
-    if (type === content.CHANGE_ACTIVE_FORMDATA) {
-        const positionMap = {};
-        action.formData.descriptions.map(description => {
-            if (positionMap[description.position]) {
-                positionMap[description.position].push(description);
-            } else {
-                positionMap[description.position] = [];
-                positionMap[description.position].push(description);
-            }
-            return '';
-        });
-
-        return {
-            ...state,
-            formData: action.formData,
-            positionMap: {...positionMap}
-        }
+    const newData = {
+        ...state.data,
+        dataBlock: newDatablock
     }
-
-    if (type === content.ENABLE_UPDATE_CONTENT) {
-        return {
-            ...state,
-            updateContent: true
-        }
+    return {
+        ...state,
+        loading: true,
+        data: newData
     }
-
-    if (type === content.DISABLE_UPDATE_CONTENT) {
-        return {
-            ...state,
-            updateContent: false
-        }
-    }
-
-    return state;
 }
-export default contents;
+
+const saveContentFail = (state, action) => {
+    return {
+        ...state,
+        loading: false
+    }
+}
+
+const setContent = (state, action) => {
+    console.log('yoooo', action)
+    return {
+        ...state,
+        data: action.data,
+        loading: false,
+        entityType: action.entityType
+    }
+}
+
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case actionTypes.SET_CONTENT: return setContent(state, action)
+        case actionTypes.SAVE_PAGE_CONTENT_START: return saveContentStart(state, action)
+        case actionTypes.SAVE_PAGE_CONTENT_FAIL: return saveContentFail(state, action)
+        default: return state
+    }
+}
+
+export default reducer
