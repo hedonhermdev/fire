@@ -6,8 +6,8 @@ import styled from '@emotion/styled'
 
 import "./Accordion.css"
 
-const ACCORDION_CLOSED_WIDTH = "75%"
-const ACCORDION_OPEN_WIDTH = "90%"
+const ACCORDION_CLOSED_WIDTH = "60%"
+const ACCORDION_OPEN_WIDTH = "70%"
 
 // Inline styles do not work well with Draggables
 // Doing it like this, though, somehow works. Fuck you too.

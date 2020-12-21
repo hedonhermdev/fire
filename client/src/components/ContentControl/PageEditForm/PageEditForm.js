@@ -314,7 +314,7 @@ const ContentBlockFormList = (props) => {
                 marginBottom: "15px",
                 marginTop: marginTop,
                 // backgroundColor: "green",
-                width: "75%",
+                width: "60%",
                 display: "flex",
                 justifyContent: "space-between"
                 // flexDirection: "column"
