@@ -1,152 +1,67 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom'
 import './App.css';
+
 import CMSMain from './screens/CMSMain/CMSMain'
+import Auth from './screens/Auth/Auth'
+
+import api from './axios'
+import * as actions from './store/actions/index'
 
 
-// class App extends React.Component {
-//   componentDidMount() {
-//       const token = localStorage.getItem('token')
-//       if (token) {
-//           this.props.loginUser(token);
-//       } else {
-//         this.props.logoutUser();
-//       }
-//   }
+const App = (props) => {
 
-//   render() {
-//     let child;
-//     if (this.props.loggedIn) {
-//       let anotherChild;
-//       if (this.props.dialogBoxContent) {
-//         anotherChild = (
-//           <Modal show={true} modalClose={this.props.closeDialogBox}>
-//             {(this.props.dialogBoxContent === 'AddPageForm') ? <AddPageForm closeDialogBox={this.props.closeDialogBox} /> : null}
-//             {(this.props.dialogBoxContent === 'EditPageForm') ? <EditPageForm closeDialogBox={this.props.closeDialogBox} /> : null}
-//             {(this.props.dialogBoxContent === 'AddPageGroupForm') ? <AddPageGroupForm closeDialogBox={this.props.closeDialogBox} /> : null}
-//             {(this.props.dialogBoxContent === 'EditPageGroupForm') ? <EditPageGroupForm closeDialogBox={this.props.closeDialogBox} /> : null}
-//           </Modal>
-//         )
-//       }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
 
-//       child = (
-//         <Aux>
-//           <SideBar />
-//           <ContentWrapper />
-//           {anotherChild}
-//         </Aux>
-//       )
-//     }
-//     return (
-//       <div className="App">
-//         <Route path='/' render={() => (this.props.loggedIn) ? child : <Redirect to='/login' />} />
-//         <Route path='/login' exact component={(this.props.loggedIn) ? () => <Redirect to='/' /> : Login} />
-//       </div>
-//     );
-//   }
-// }
+    if (token) {
+      props.setUser({ username, token })
+    }
+    else {
+      props.unsetUser()
+    }
+  }, [])
 
-// const mapStateToProp = state => {
-//     return {
-//       loggedIn: state.auth.loggedIn,
-//       dialogBoxContent: state.dialogBox.dialogBoxContent
-//     };
-// };
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         loginUser: (token) => dispatch({ type: 'LOGIN_USER', token }),
-//         logoutUser: (token) => dispatch({ type: 'LOGOUT_USER' }),
-//         closeDialogBox: () => dispatch({ type: 'CLOSE_DIALOG_BOX' })
-//     };
-// };
-// export default connect(mapStateToProp, mapDispatchToProps)(App);
+  if (props.token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${props.token}`
+  }
+  else {
+    api.defaults.headers.common['Authorization'] = null
+  }
 
-const template = {
-  _meta: {
-      quantity: -1,
-      title: "button_title"
-  },
-  button_title: "text",
-  content_title: "text",
-  content: "richtext",
-  additional: {
-      _meta: {
-          quantity: {
-            min: 2,
-            max: 4
-          },
-          title: "interest"
-      },
-      interest: "text",
-      papers: {
-        _meta: {
-          quantity: 2,
-          title: "title"
-        },
-        title: "text",
-        link: "text"
-      }
+  return (
+    <div className='App'>
+      
+      <Route
+        path='/'
+        render={() => !!props.token ? <CMSMain/> : <Redirect to='/login'/>}
+      />
+
+      <Route
+        path='/login'
+        exact
+        render={() => !!props.token ? <Redirect to='/' /> : <Auth/>}
+      />
+
+    </div>   
+  );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    token: state.auth.token
   }
 }
 
-const data = {
-  button_title: "Academics",
-  content_title: "Academics Content",
-  content: "These are my academic interests - I have no academic interests",
-  additional: [
-      {
-          interest: "SDN",
-          papers: [
-            {
-              title: "Paper A",
-              link: "google.com"
-            },
-            {
-              title: "Paper B",
-              link: "facebook.com"
-            }
-          ]
-      },
-      {
-          interest: "AI/ML",
-          papers: [
-            {
-              title: "Paper A",
-              link: "google.com"
-            },
-            {
-              title: "Paper B",
-              link: "facebook.com"
-            }
-          ]
-      },
-      {
-          interest: "Blockchain",
-          papers: [
-            {
-              title: "Paper A",
-              link: "google.com"
-            },
-            {
-              title: "Paper B",
-              link: "facebook.com"
-            }
-          ]
-      }
-  ]
-}
-
-
-class App extends React.Component {
-  render() {
-    return (
-      // <div style={{padding: "15px"}}>
-      //   <PageEditForm data={data} template={template} index={0} />
-      // </div>
-      <CMSMain/>
-    );
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: ({username, token}) => dispatch(actions.setUserInfo({username, token})),
+    unsetUser: () => dispatch(actions.unsetUserInfo())
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App)

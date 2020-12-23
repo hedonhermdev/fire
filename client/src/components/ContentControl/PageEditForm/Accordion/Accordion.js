@@ -18,8 +18,6 @@ const AccordionCard = styled.div({
 const Accordion = (props) => {
     const [active, setActive] = useState(false)
 
-    const content = useRef(null)
-
     function toggleAccordion() {
         setActive(!active)
     }

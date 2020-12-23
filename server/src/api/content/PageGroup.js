@@ -3,6 +3,8 @@ const Page = require('../../models/Page')
 const PageGroup = require('../../models/PageGroup')
 const PageGroupTemplate = require('../../models/PageGroupTemplate')
 
+const auth = require('../../middleware/auth')
+
 const getRoot = async (req, res) => {
     const pageGroup = await PageGroup.withPopulatedData(
         PageGroup.findOne({ name: '__main' })
@@ -111,10 +113,10 @@ const deletePageGroup = async (req, res) => {
 }
 
 const router = new express.Router()
-router.get('/root', getRoot)
-router.get('/:id', getPageGroup)
-router.post('/', createPageGroup)
-router.put('/:id', modifyPageGroup)
-router.delete('/:id', deletePageGroup)
+router.get('/root', auth, getRoot)
+router.get('/:id', auth, getPageGroup)
+router.post('/', auth, createPageGroup)
+router.put('/:id', auth, modifyPageGroup)
+router.delete('/:id', auth, deletePageGroup)
 
 module.exports = router

@@ -11,3 +11,9 @@ export {
     saveContentFail,
     saveContentStart
 } from './content'
+
+export {
+    login,
+    setUserInfo,
+    unsetUserInfo
+} from './auth'

@@ -14,3 +14,11 @@ export const SAVE_PAGE_CONTENT = 'SAVE_PAGE_CONTENT'
 export const SAVE_PAGE_CONTENT_START = 'SAVE_PAGE_CONTENT_START'
 export const SAVE_PAGE_CONTENT_FAIL = 'SAVE_PAGE_CONTENT_FAIL'
 export const SET_CONTENT = 'SET_CONTENT'
+
+
+export const LOGIN = 'LOGIN'
+export const LOGIN_START = 'LOGIN_START'
+export const LOGIN_FAIL = 'LOGIN_FAIL'
+export const SET_USER_INFO = 'SET_USER_INFO'
+export const UNSET_USER_INFO = 'UNSET_USER_INFO'
+export const LOGOUT = 'LOGOUT'

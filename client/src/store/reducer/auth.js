@@ -1,32 +1,65 @@
-import * as auth from '../actions/auth';
+import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
-    loggedIn: true,
-    token: null
+    loading: false,
+    error: null,
+    user: null,
+    token: '',
+    isAuthenticated: false
 }
 
-const auths = (state = {initialState}, action) => {
-    const { type } = action;
+const setUser = (state, action) => {
+    localStorage.setItem('token', action.token)
+    localStorage.setItem('username', action.username)
 
-    if( type === auth.LOGIN_USER) {
-        return {
-            ...state,
-            loggedIn: true,
-            token: action.token
-        }
+    console.log(action)
+    console.log('bruh')
+
+    return {
+        ...state,
+        loading: false,
+        error: null,
+        user: action.user,
+        token: action.token
     }
-
-    if( type === auth.LOGOUT_USER) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        return {
-            ...state,
-            loggedIn: false,
-            token: null
-        }
-    }
-
-    return state;
 }
 
-export default auths;
+const unsetUser = (state, action) => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+
+    return {
+        ...state,
+        user: null,
+        token: '',
+        loading: false
+    }
+}
+
+const loginStart = (state, action) => {
+    console.log('loginstart')
+    return {
+        ...state,
+        loading: true
+    }
+}
+
+const loginFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: action.error
+    }
+}
+
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case actionTypes.LOGIN_START: return loginStart(state, action)
+        case actionTypes.SET_USER_INFO: return setUser(state, action)
+        case actionTypes.UNSET_USER_INFO: return unsetUser(state, action)
+        case actionTypes.LOGIN_FAIL: return loginFail(state, action)
+        default: return state
+    }
+}
+
+export default reducer
