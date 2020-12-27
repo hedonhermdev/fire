@@ -14,7 +14,6 @@ const getRoot = async (req, res) => {
             message: 'No root page group found, boy someone fucked up'
         })
     }
-
     return res.status(200).send(pageGroup)
 }
 

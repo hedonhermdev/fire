@@ -38,7 +38,7 @@ const BreadCrumb = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.nav.breadCrumb
+        data: state.content.breadCrumb
     }
 }
 

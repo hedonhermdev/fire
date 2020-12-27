@@ -2,14 +2,8 @@ export {
     navBreadCrumbPush,
     openEntity,
     openRoot,
-    navigateToEntity
-} from './nav'
-
-export {
-    setContent,
-    saveContent,
-    saveContentFail,
-    saveContentStart
+    navigateToEntity,
+    saveContent
 } from './content'
 
 export {

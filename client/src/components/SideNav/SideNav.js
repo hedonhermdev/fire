@@ -5,7 +5,7 @@ import './SideNav.css'
 const SideNav = (props) => {
     return (
         <div className="SideNav">
-            Bruh
+            {/* Bruh */}
         </div>
     )
 }
