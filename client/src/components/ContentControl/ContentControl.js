@@ -8,14 +8,14 @@ import PageGroup from './PageGroup/PageGroup'
 import './ContentControl.css'
 
 const ContentControl = (props) => {
-    // console.log(props.navData)
-    console.log('bruh', props.bruh)
-
+    console.log('ContentControl was re-rendered')
     let content = (
         <div>
             
         </div>
     )
+    
+    console.log('props.loading is', props.loading)
 
     if (!props.loading) {
         content = (

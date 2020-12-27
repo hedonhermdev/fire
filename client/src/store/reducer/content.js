@@ -1,19 +1,19 @@
-import { saveContent } from '../actions'
+import update from 'immutability-helper'
+
 import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
+    error: null,
     breadCrumb: [],
     loading: true,
-    error: null,
     entityType: 'PAGE_GROUP',
     data: {}
 }
 
 const openEntityStart = (state, action) => {
-    return {
-        ...state,
-        loading: true
-    }
+    return update(state, {
+        loading: {$set: true}
+    })
 }
 
 const openEntityFail = (state, action) => {
@@ -24,78 +24,55 @@ const openEntityFail = (state, action) => {
     }
 }
 
-const openEntity = (state, action) => {
-    return {
-        ...state,
-        loading: false
-    }
-}
-
 const setContent = (state, action) => {
-    console.log('yoooo', action)
-    return {
-        ...state,
-        data: action.data,
-        loading: false,
-        entityType: action.entityType
-    }
-}
+    const newState = update(state, {
+        data: {$set: action.data},
+        loading: {$set: false},
+        entityType: {$set: action.entityType},
+        breadCrumb: {
+            $apply: function(bc) {
+                const newbc = []
+                console.log(action.data._id)
+                const notFound = bc.every((item) => {
+                    newbc.push(item)
+                    return item.id !== action.data._id
+                })
 
-const breadCrumbPush = (state, action) => {
-    const newBreadCrumb = state.breadCrumb.concat({
-        id: action.id,
-        name: action.name
+                if (notFound || bc.length === 0) {
+                    const name = action.data.name === '__main' ? 'Home' : action.data.name
+                    newbc.push({
+                        name: name,
+                        id: action.data._id
+                    })
+                }
+                return newbc
+            }
+        }
     })
-    return {
-        ...state,
-        breadCrumb: newBreadCrumb
-    }
-}
-
-const setBreadCrumb = (state, action) => {
-    const newBreadCrumb = []
-    // the every-loop breaks if the function returns false
-    state.breadCrumb.every((item) => {
-        newBreadCrumb.push(item)
-        return item.id !== action.id
-    })
-    
-    return {
-        ...state,
-        breadCrumb: newBreadCrumb
-    }
+    console.log(newState)
+    return newState
 }
 
 const saveContentStart = (state, action) => {
-    const newDatablock = {
-        ...state.data.dataBlock,
-        data: action.data
-    }
-    const newData = {
-        ...state.data,
-        dataBlock: newDatablock
-    }
-    return {
-        ...state,
-        loading: true,
-        data: newData
-    }
+    return update(state, {
+        data: {
+            dataBlock: {
+                data: {$set: action.data}
+            }
+        }
+    })
 }
 
 const saveContentFail = (state, action) => {
-    return {
-        ...state,
-        loading: false
-    }
+    return update(state, {
+        loading: {$set: false}
+    })
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.NAV_OPEN_ENTITY_SUCCESS: return openEntity(state, action)
         case actionTypes.NAV_OPEN_ENTITY_START: return openEntityStart(state, action)
         case actionTypes.NAV_OPEN_ENTITY_FAIL: return openEntityFail(state, action)
-        case actionTypes.NAV_BREADCRUMB_PUSH: return breadCrumbPush(state, action)
-        case actionTypes.NAV_BREADCRUMB_SET: return setBreadCrumb(state, action)
         case actionTypes.SET_CONTENT: return setContent(state, action)
         case actionTypes.SAVE_PAGE_CONTENT_START: return saveContentStart(state, action)
         case actionTypes.SAVE_PAGE_CONTENT_FAIL: return saveContentFail(state, action)

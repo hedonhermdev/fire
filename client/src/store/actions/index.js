@@ -1,8 +1,6 @@
 export {
-    navBreadCrumbPush,
     openEntity,
     openRoot,
-    navigateToEntity,
     saveContent
 } from './content'
 

@@ -44,7 +44,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigateToEntity: ({ name, id }) => dispatch(actions.navigateToEntity({ name, id }))
+        navigateToEntity: ({ name, id }) => dispatch(actions.openEntity({ name, id }))
     }
 }
 
