@@ -38,7 +38,7 @@ const PageGroup = (props) => {
     return (
         <div className="PageGroup">
             <div class='PageGroup__sectionLabel'>
-                Page Groups
+                PAGE GROUPS
             </div>
             <div className="PageGroup__section">
                 {
@@ -57,7 +57,7 @@ const PageGroup = (props) => {
             </div>
             <br/>
             <div class='PageGroup__sectionLabel'>
-                Pages
+                PAGES
             </div>
             <div className="PageGroup__section">
                 {

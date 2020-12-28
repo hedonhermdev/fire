@@ -9,10 +9,16 @@ import './BreadCrumb.css'
 const BreadCrumb = (props) => {
 
     const breadCrumb = []
-    props.data.forEach((entry) => {
+    const lastidx = props.data.length - 1
+    props.data.forEach((entry, idx) => {
+        let className = 'BreadCrumb__entry'
+        if (idx === lastidx) {
+            className += ' BreadCrumb__entry__highlighted'
+        }
+        console.log(className)
         breadCrumb.push(
             <div 
-                className='BreadCrumb__entry'
+                className={className}
                 onClick={() => props.navigateToEntity({
                     name: entry.name,
                     id: entry.id
@@ -23,7 +29,8 @@ const BreadCrumb = (props) => {
         )
         breadCrumb.push(
             <div className='BreadCrumb__rightIcon'>
-                <FaChevronRight/>
+                {/* <FaChevronRight/> */}
+                /
             </div>
         )
     })

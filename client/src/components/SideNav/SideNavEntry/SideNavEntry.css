@@ -1,0 +1,39 @@
+.SideNavEntry {
+    /* background-color: green; */
+    display: flex;
+    align-items: center;
+    height: 35px;
+    /* margin-left: 10px; */
+    padding-left: 16px;
+    /* font-size: var(--text-m); */
+    font-size: 18px;
+    border-radius: var(--border-radius-l);
+    transition: color 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+    color: var(--light-gray);
+    font-weight: var(--fontweight-medium);
+    margin-bottom: 5px;
+}
+
+.SideNavEntry.Active {
+    background-color: var(--highlight);
+    color: var(--primary);
+}
+
+.SideNavEntry__icon {
+    font-size: 25px;
+    /* background-color: aqua; */
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.SideNavEntry:hover {
+    background-color: var(--highlight);
+    color: var(--primary)
+}
+
+.SideNavEntry__label {
+    margin-left: 10px;
+}

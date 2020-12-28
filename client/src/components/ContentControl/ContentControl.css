@@ -1,4 +1,6 @@
 .ContentControl {
-    /* background-color: green; */
+    /* background-color: var(--background-color); */
+    padding-left: 50px;
+    box-sizing: border-box;
     height: 100%;
 }

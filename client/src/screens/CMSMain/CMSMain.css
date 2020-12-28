@@ -1,5 +1,5 @@
 .CMSMain {
-    /* background-color: green; */
+    background-color: var(--background-color);
     height: 100vh;
     display: flex;
 }
