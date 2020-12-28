@@ -4,6 +4,27 @@
     display: flex;
 }
 
+.CMSMain__ControlBtn {
+    /* background-color: aqua; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    width: 50px;
+    margin: 20px auto;
+    border-radius: var(--border-radius-l);
+    box-shadow: var(--heavy-shadow);
+    font-size: var(--text-m);
+    font-weight: var(--fontweight-medium);
+    color: var(--primary);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.CMSMain__ControlBtn:hover {
+    box-shadow: var(--heavy-shadow-blur);
+}
+
 .MainArea {
     /* background-color: aqua; */
     flex: 1 1 auto;
