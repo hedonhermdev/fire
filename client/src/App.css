@@ -6,8 +6,11 @@
     --primary: rgba(var(--primary-blue), 0.6);
     --highlight: rgba(var(--primary-blue), 0.05);
     --light-gray: #9999998a;
+    --very-light-gray: rgba(221, 221, 221, 0.54);
     --entity-color: #fff;
+    --formfield-background: #fefefe;
 
+    --text-xs: 16px;
     --text-s: 18px;
     --text-m: 22px;
     --text-l: 32px;

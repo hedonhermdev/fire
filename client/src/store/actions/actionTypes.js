@@ -22,3 +22,6 @@ export const LOGIN_FAIL = 'LOGIN_FAIL'
 export const SET_USER_INFO = 'SET_USER_INFO'
 export const UNSET_USER_INFO = 'UNSET_USER_INFO'
 export const LOGOUT = 'LOGOUT'
+
+
+export const LOAD_META = 'LOAD_META'

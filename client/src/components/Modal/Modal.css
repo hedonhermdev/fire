@@ -1,0 +1,14 @@
+.Modal {
+    position: absolute;
+    right: 20px;
+    top: -30px;
+    height: 400px;
+    width: 290px;
+    /* margin-right: 10px; */
+    background-color: var(--entity-color);
+    box-shadow: var(--light-shadow);
+    border-radius: var(--border-radius-l);
+    float: right;
+    padding: 20px;
+    box-sizing: border-box;
+}

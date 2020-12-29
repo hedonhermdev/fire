@@ -1,0 +1,40 @@
+.Select {
+    box-shadow: var(--heavy-shadow);
+    min-width: 150px;
+    padding: 5px 10px;
+    font-size: var(--text-s);
+    font-weight: var(--fontweight-medium);
+    border-radius: var(--border-radius-l);
+    cursor: pointer;
+    position: absolute;
+    transition: height 0.2s ease;
+}
+
+.Select.open {
+    padding: 0px;
+}
+
+.Select__option {
+    /* margin-bottom: 15px; */
+    /* width: 100%; */
+    min-width: 150px;
+    padding: 5px 10px;
+    transition: background-color 0.2s ease;
+    /* background-color: red; */
+}
+
+.Select__option:hover {
+    background-color: var(--highlight);
+}
+
+.Select__option:first-child {
+    /* margin-bottom: 5px; */
+    border-top-left-radius: var(--border-radius-l);
+    border-top-right-radius: var(--border-radius-l);
+}
+
+.Select__option:last-child {
+    /* margin-bottom: 5px; */
+    border-bottom-left-radius: var(--border-radius-l);
+    border-bottom-right-radius: var(--border-radius-l);
+}

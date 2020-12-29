@@ -9,3 +9,7 @@ export {
     setUserInfo,
     unsetUserInfo
 } from './auth'
+
+export {
+    loadMeta
+} from './meta'
