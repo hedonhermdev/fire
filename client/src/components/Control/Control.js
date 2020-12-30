@@ -5,7 +5,7 @@ import './Control.css'
 
 const Control = (props) => {
 
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const {
         width = '300px',
         height = '400px'
