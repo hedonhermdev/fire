@@ -25,14 +25,18 @@ const CreateEntityControl = (props) => {
             label: template.name
         }
     })
-    const currTemplate = pageTemplateOpts[0]
-    console.log(currTemplate)
-    // const bruh = {a: 1}
+
+    const pgTemplateOpts = [
+        {
+            value: null,
+            label: 'None'
+        }
+    ]
 
     const [state, setState] = useState({
         entityType: entityOpts[0],
         name: '',
-        template: currTemplate,
+        template: pageTemplateOpts[0],
     })
     console.log(state)
 
@@ -40,8 +44,23 @@ const CreateEntityControl = (props) => {
         console.log(value)
         const newState = {...state}
         newState[key] = value
+
+        // Reset the state and change template options if the entityType
+        // changes.
+        if (key === 'entityType') {
+            console.log('entityType change', value)
+            if (value.id === 'PAGE') {
+                newState.template = pageTemplateOpts[0]
+            }
+            else {
+                newState.template = pgTemplateOpts[0]
+            }
+            newState.name = ''
+        }
         setState(newState)
     }
+
+    const templateOpts = state.entityType.id === 'PAGE' ? pageTemplateOpts : pgTemplateOpts
 
     return (
         <Control
@@ -53,7 +72,8 @@ const CreateEntityControl = (props) => {
                 name={state.name}
                 template={state.template}
                 entityOpts={entityOpts}
-                templateOpts={pageTemplateOpts}
+                templateOpts={templateOpts}
+                entityType={state.entityType}
                 onChange={(key, val) => handleChange(key, val)}
             />
         </Control>
