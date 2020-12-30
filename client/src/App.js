@@ -27,21 +27,11 @@ const App = (props) => {
 
   if (props.token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${props.token}`
-
+    
     // Loading all metadata needed for CMS functioning.
     // TODO: Move to a separate function?
-    const pageTemplates = api.get('/template/page')
-    const pgTemplates = api.get('template/pageGroup')
-      Promise.all([pageTemplates], [pgTemplates])
-        .then((vals) => {
-          props.loadMeta({
-            pageTemplates: vals[0].data,
-            pgTemplates: vals[1]?.data
-          })
-        })
-        .catch((e) => {
-          console.log('major bruh moment', e)
-        })
+    props.loadMeta()
+    
   }
   else {
     api.defaults.headers.common['Authorization'] = null
@@ -76,7 +66,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setUser: ({username, token}) => dispatch(actions.setUserInfo({username, token})),
     unsetUser: () => dispatch(actions.unsetUserInfo()),
-    loadMeta: ({ pageTemplates, pgTemplates }) => dispatch(actions.loadMeta({ pageTemplates, pgTemplates }))
+    loadMeta: () => dispatch(actions.loadMeta())
   }
 }
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import CharField from '../../../Form/CharField/CharField'
-import Dropdown from '../../../Form/Dropdown/Dropdown'
-import Switch from '../../../Switch/Switch'
+import CharField from '../../../../../Form/CharField/CharField'
+import Dropdown from '../../../../../Form/Dropdown/Dropdown'
+import Switch from '../../../../../Switch/Switch'
 
 import './NewEntityForm.css'
 
@@ -37,25 +37,6 @@ function getBaseUrl(parentGroup, childName) {
 
 
 const NewEntityForm = (props) => {
-    const pgTemplateOpts = props.pageTemplates.map((template) => {
-        return {
-            value: template._id,
-            label: template.name
-        }
-    })
-
-    const [state, setState] = useState({
-        entityType: options[0],
-        name: '',
-        template: pgTemplateOpts[0]
-    })
-
-    function handleChange(key, value) {
-        console.log(value)
-        const newState = {...state}
-        newState[key] = value
-        setState(newState)
-    }
 
     return (
         <div className='NewEntityForm'>
@@ -63,27 +44,27 @@ const NewEntityForm = (props) => {
                 Add
                 <div className='NewEntityForm__switch'>
                     <Switch
-                        options={options}
-                        onChange={(val) => handleChange('entityType', val)}
+                        options={props.entityOpts}
+                        onChange={(val) => props.onChange('entityType', val)}
                     />
                 </div>
             </div>
             <CharField
                 label='NAME'
-                value={state.name}
-                onChange={(e) => handleChange('name', e.target.value)}
+                value={props.name}
+                onChange={(e) => props.onChange('name', e.target.value)}
             />
             <Dropdown
                 label='TEMPLATE'
-                value={state.template}
-                onChange={(val) => handleChange('template', val)}
-                options={pgTemplateOpts}
+                value={props.template}
+                onChange={(val) => props.onChange('template', val)}
+                options={props.templateOpts}
             />
             <div className='NewEntityForm__url__label'>
                 BASE URL
             </div>
             <div className='NewEntityForm__url__value'>
-                {getBaseUrl(props.navData, state.name)}
+                {getBaseUrl(props.navData, props.name)}
             </div>
             <div className='NewEntityForm__submitBtn'>
                 Create

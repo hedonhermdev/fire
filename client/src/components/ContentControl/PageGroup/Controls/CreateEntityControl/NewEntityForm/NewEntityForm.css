@@ -70,6 +70,9 @@
     border-radius: var(--border-radius-l);
     cursor: pointer;
     transition: transform 0.3s ease;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .NewEntityForm__submitBtn:active {

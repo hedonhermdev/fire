@@ -25,3 +25,6 @@ export const LOGOUT = 'LOGOUT'
 
 
 export const LOAD_META = 'LOAD_META'
+export const LOAD_META_START = 'LOAD_META_START'
+export const LOAD_META_SUCCESS = 'LOAD_META_SUCCESS'
+export const LOAD_META_FAIL = 'LOAD_META_FAIL'

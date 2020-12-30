@@ -37,8 +37,7 @@ const mapStateToProps = (state) => {
     return {
         navData: state.content.data,
         entityType: state.content.entityType,
-        loading: state.content.loading,
-        bruh: state
+        loading: state.content.loading
     }
 }
 

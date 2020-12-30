@@ -1,8 +1,5 @@
 import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-import { MdFontDownload, MdSettings } from 'react-icons/md'
-import { FaPlus } from 'react-icons/fa'
 
 import SideNav from '../../components/SideNav/SideNav'
 import ContentControl from '../../components/ContentControl/ContentControl'
@@ -11,6 +8,7 @@ import * as actions from '../../store/actions/index'
 
 import './CMSMain.css'
 import ControlBar from '../../components/ControlBar/ControlBar'
+import CreateEntityControl from '../../components/ContentControl/PageGroup/Controls/CreateEntityControl/CreateEntityControl'
 
 
 const CMSMain = (props) => {
@@ -21,37 +19,34 @@ const CMSMain = (props) => {
         }
     }, [props.token])
 
-    let controls = []
-    const addControl = (
-        <div className='CMSMain__ControlBtn'>
-            <FaPlus/>
-        </div>
-    )
-    const settingsControl = (
-        <div className='CMSMain__ControlBtn'>
-            <MdSettings/>
-        </div>
-    )
-    controls.push(addControl)
-    controls.push(settingsControl)
-
-    console.log('bruhhhhh')
     return (
         <div className='CMSMain'>
             <SideNav/>
-            <div className="MainArea">
-                <ContentControl/>
-            </div>
-            <ControlBar>
-                {controls}
-            </ControlBar>
+            {
+                props.metaLoading
+                ?   (
+                    <div>
+                        Loading
+                    </div>
+                )
+
+                :   <div className="MainArea">
+                        <div className='MainArea__contentWrapper'>
+                            <ContentControl/>
+                        </div>
+                        <ControlBar>
+                            <CreateEntityControl/>
+                        </ControlBar>
+                    </div>
+            }
         </div>
     )
 }
 
 const mapStateToProps = (state) => {
     return {
-        token: state.auth.token
+        token: state.auth.token,
+        metaLoading: state.meta.loading
     }
 }
 

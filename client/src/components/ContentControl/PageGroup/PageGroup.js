@@ -6,7 +6,6 @@ import Modal from '../../Modal/Modal'
 import * as actions from '../../../store/actions/index'
 
 import './PageGroup.css'
-import NewEntityForm from './NewEntityForm/NewEntityForm'
 
 const EntityIcon = (props) => {
     let icon = (
@@ -76,9 +75,6 @@ const PageGroup = (props) => {
                     ))
                 }
             </div>
-            <Modal>
-                <NewEntityForm/>
-            </Modal>
         </div>
     )
 }

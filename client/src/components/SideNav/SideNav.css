@@ -1,5 +1,6 @@
 .SideNav {
     background-color: var(--entity-color);
+    /* background-color: transparent; */
     width: 350px;
     padding-left: 30px;
     padding-right: 30px;
