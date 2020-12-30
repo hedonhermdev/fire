@@ -7,14 +7,16 @@ const Switch = (props) => {
     const [index, setIndex] = useState(0)
 
     function switchVal() {
+        let newIndex
         if (index + 1 === options.length) {
-            setIndex(0)
+            newIndex = 0
         }
         else {
-            setIndex(index+1)
+            newIndex = index+1
         }
 
-        props.onChange(options[index])
+        props.onChange(options[newIndex])
+        setIndex(newIndex)
     }
     
     return (
