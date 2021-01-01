@@ -1,0 +1,34 @@
+{
+    "structure": {
+        "pages": [
+            {
+                "name": "bruh",
+                "template": "home"
+            },
+            {
+                "name": "bruh2",
+                "template": "prof"
+            }
+        ]
+    },
+    "data": {
+        "nav_bar": {
+            "_meta": {
+                "quantity": 1,
+                "title": "title"
+            },
+            "title": "text",
+            "nav_entry": {
+                "_meta": {
+                    "quantity": {
+                        "min": 5,
+                        "max": 8
+                    },
+                    "title": "name"
+                },
+                "name": "text",
+                "url": "text"
+            }
+        }
+    }
+}

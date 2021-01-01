@@ -23,7 +23,11 @@ const pageGroupSchema = new mongoose.Schema({
     pages: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Page'
-    }]
+    }],
+    dataBlock: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DataBlock'
+    }
 })
 
 pageGroupSchema.statics.allowedUpdates = function () {

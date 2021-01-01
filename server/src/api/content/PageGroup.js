@@ -111,10 +111,26 @@ const deletePageGroup = async (req, res) => {
     return res.status(200).send(pageGroup)
 }
 
+const updateData = async (req, res) => {
+    try {
+        const pg = await (await PageGroup.findById(req.params.id)).populated('dataBlock')
+        const dataBlock = pg.dataBlock
+        dataBlock.data = req.body.data
+        console.log(req.body)
+        await dataBlock.save()
+        return res.status(200).send(pg)
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(500).send(e)
+    }
+}
+
 const router = new express.Router()
 router.get('/root', auth, getRoot)
 router.get('/:id', auth, getPageGroup)
 router.post('/', auth, createPageGroup)
+router.post('/updateData/:id', auth, updateData)
 router.put('/:id', auth, modifyPageGroup)
 router.delete('/:id', auth, deletePageGroup)
 
