@@ -1,0 +1,38 @@
+.Control {
+    display: flex;
+    justify-content: right;
+}
+
+.Control__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    width: 50px;
+    margin: 20px auto;
+    border-radius: var(--border-radius-l);
+    box-shadow: var(--heavy-shadow);
+    font-size: var(--text-m);
+    font-weight: var(--fontweight-medium);
+    color: var(--primary);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.Control__icon:active {
+    transform: translateY(4px);
+}
+
+.Control__icon.open {
+    background-color: var(--primary);
+    color: var(--entity-color);
+    box-shadow: var(--heavy-shadow);
+}
+
+.Control__icon:hover {
+    box-shadow: var(--heavy-shadow-blur);
+}
+
+.Control__icon.open:hover {
+    box-shadow: var(--heavy-shadow);
+}

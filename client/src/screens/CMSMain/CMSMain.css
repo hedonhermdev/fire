@@ -1,0 +1,29 @@
+.CMSMain {
+    background-color: var(--background-color);
+    /* background-color: red; */
+    height: 100vh;
+    display: flex;
+}
+
+.CMSMain__ControlBtn:hover {
+    box-shadow: var(--heavy-shadow-blur);
+}
+
+.MainArea {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+.MainArea__contentWrapper {
+    display: flex;
+    width: 100%;
+}
+
+/* .MainArea__contentWrapper {
+    width: 100%;
+    background-color: green;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(360px, 1fr));
+} */

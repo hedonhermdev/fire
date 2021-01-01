@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const PageGroup = require('./PageGroup')
-const PageTemplate = require('./PageTemplate')
+const DataBlockTemplate = require('./DataBlockTemplate')
 
 const pageSchema = new mongoose.Schema({
     name: {
@@ -16,20 +16,19 @@ const pageSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    template: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'PageTemplate',
-        required: true
-    },
     parentGroup: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PageGroup',
         default: null
+    },
+    dataBlock: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DataBlock'
     }
 })
 
 pageSchema.statics.allowedUpdates = () => {
-    return ['name', 'active', 'parentGroup']
+    return ['name', 'active']
 }
 
 pageSchema.methods.performValidation = async function () {
@@ -37,7 +36,7 @@ pageSchema.methods.performValidation = async function () {
     err.status = 400
 
     if (this.isModified('template')) {
-        const templateExists = await PageTemplate.exists({ _id: this.template })
+        const templateExists = await DataBlockTemplate.exists({ _id: this.template })
         if (!templateExists) {
             err.message = `Template with id ${this.template.toString()} does not exist`
             throw err
@@ -55,23 +54,30 @@ pageSchema.methods.performValidation = async function () {
     }
 }
 
-pageSchema.pre('save', async function (next) {
-    await this.performValidation()
+pageSchema.methods.getUrl = async function() {
+    if (!this.populated('parentGroup')) {
+        await this.populate('parentGroup').execPopulate()
+    }
 
-    const pageGroup = await PageGroup.findById(this.parentGroup)
-    let parentUrl = pageGroup ? pageGroup.baseUrl : ''
+    let parentUrl = ''
+    if (this.parentGroup && this.parentGroup.name !== '__main') {
+        parentUrl = this.parentGroup.baseUrl
+    }
 
     if (parentUrl === '') {
-        this.url = this.name
+        return this.name
     }
-    else {
-        if (this.name === 'index') {
-            this.url = parentUrl
-        }
-        else {
-            this.url = `${parentUrl}/${this.name}`
-        }
+    
+    if (this.name === 'index') {
+        return parentUrl
     }
+
+    return `${parentUrl}/${this.name}`
+}
+
+pageSchema.pre('save', async function (next) {
+    await this.performValidation()
+    this.url = await this.getUrl()
     next()
 })
 

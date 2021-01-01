@@ -1,0 +1,49 @@
+@import '../../../App.css';
+
+.BreadCrumb {
+    /* background-color: aqua; */
+    /* height: 50px; */
+    margin-left: -2px;
+    margin-top: 20px;
+    width: 1000px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    /* border-bottom: 1px solid #506f852d; */
+}
+
+.BreadCrumb__entry {
+    font-size: var(--text-m);
+    font-weight: 500;
+    color: var(--primary);
+    /* background-color: #506f852d; */
+    border-radius: 5px;
+    padding: 0px 8px 0px 8px;
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    /* transition: box-shadow 0.2s ease; */
+    align-items: center;
+    /* margin-right: 5px; */
+}
+
+.BreadCrumb__entry.BreadCrumb__entry__highlighted {
+    background-color: #3A86FF0D;
+}
+
+.BreadCrumb__entry:hover {
+    background-color: #3A86FF0D;
+    /* font-size: 28px; */
+    /* box-shadow: 0px 0px 8px 4px #799ab11f; */
+}
+
+.BreadCrumb__rightIcon {
+    /* background-color: greenyellow; */
+    color: #9999998a;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

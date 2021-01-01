@@ -1,12 +1,7 @@
 {
-    "page_title": {
-        "meta": {
-            "quantity": 1 
-        },
-        "title": "text"
-    },
+    "page_title": "text",
     "profile": {
-        "meta": {
+        "_meta": {
             "quantity": 1
         },
         "button_title": "text",
@@ -20,7 +15,7 @@
         }
     },
     "additional_tabs": {
-        "meta": {
+        "_meta": {
             "quantity": -1,
             "title": "title"
         },
@@ -34,7 +29,7 @@
         }
     },
     "contact": {
-        "meta": {
+        "_meta": {
             "quantity": 1
         },
         "email": "text",

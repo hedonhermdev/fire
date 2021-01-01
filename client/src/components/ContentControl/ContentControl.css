@@ -1,0 +1,6 @@
+.ContentControl {
+    /* background-color: var(--background-color); */
+    padding-left: 50px;
+    box-sizing: border-box;
+    height: 100%;
+}

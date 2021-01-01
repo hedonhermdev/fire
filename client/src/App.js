@@ -1,72 +1,73 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom'
 import './App.css';
-import SideBar from './components/SideBar/SideBar';
-import ContentWrapper from './components/ContentWrapper/ContentWrapper';
-import Aux from './components/hoc/Aux/Aux';
-import Login from './components/Login/Login';
-import { Route, Redirect } from 'react-router-dom';
-import Modal from './components/UI/Modal/Modal';
-import AddPageForm from "./components/AddPageForm/AddPageForm";
-import EditPageForm from "./components/EditPageForm/EditPageForm";
-import AddPageGroupForm from "./components/AddPageGroupForm/AddPageGroupForm";
-import EditPageGroupForm from "./components/EditPageGroupForm/EditPageGroupForm";
 
-class App extends React.Component {
-  componentDidMount() {
-      const token = localStorage.getItem('token')
-      if (token) {
-          this.props.loginUser(token);
-      } else {
-        this.props.logoutUser();
-      }
+import CMSMain from './screens/CMSMain/CMSMain'
+import Auth from './screens/Auth/Auth'
+
+import api from './axios'
+import * as actions from './store/actions/index'
+
+
+const App = (props) => {
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+
+    if (token) {
+      props.setUser({ username, token })
+    }
+    else {
+      props.unsetUser()
+    }
+  }, [])
+
+
+  if (props.token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${props.token}`
+    
+    // Loading all metadata needed for CMS functioning.
+    // TODO: Move to a separate function?
+    props.loadMeta()
+    
+  }
+  else {
+    api.defaults.headers.common['Authorization'] = null
   }
 
-  render() {
-    let child;
-    if (this.props.loggedIn) {
-      let anotherChild;
-      if (this.props.dialogBoxContent) {
-        anotherChild = (
-          <Modal show={true} modalClose={this.props.closeDialogBox}>
-            {(this.props.dialogBoxContent === 'AddPageForm') ? <AddPageForm closeDialogBox={this.props.closeDialogBox} /> : null}
-            {(this.props.dialogBoxContent === 'EditPageForm') ? <EditPageForm closeDialogBox={this.props.closeDialogBox} /> : null}
-            {(this.props.dialogBoxContent === 'AddPageGroupForm') ? <AddPageGroupForm closeDialogBox={this.props.closeDialogBox} /> : null}
-            {(this.props.dialogBoxContent === 'EditPageGroupForm') ? <EditPageGroupForm closeDialogBox={this.props.closeDialogBox} /> : null}
-          </Modal>
-        )
-      }
+  return (
+    <div className='App'>
+      
+      <Route
+        path='/'
+        render={() => !!props.token ? <CMSMain/> : <Redirect to='/login'/>}
+      />
 
-      child = (
-        <Aux>
-          <SideBar />
-          <ContentWrapper />
-          {anotherChild}
-        </Aux>
-      )
-    }
-    return (
-      <div className="App">
-        <Route path='/' render={() => (this.props.loggedIn) ? child : <Redirect to='/login' />} />
-        <Route path='/login' exact component={(this.props.loggedIn) ? () => <Redirect to='/' /> : Login} />
-      </div>
-    );
+      <Route
+        path='/login'
+        exact
+        render={() => !!props.token ? <Redirect to='/' /> : <Auth/>}
+      />
+
+    </div>   
+  );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    token: state.auth.token
   }
 }
 
-const mapStateToProp = state => {
-    return {
-      loggedIn: state.auth.loggedIn,
-      dialogBoxContent: state.dialogBox.dialogBoxContent
-    };
-};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: ({username, token}) => dispatch(actions.setUserInfo({username, token})),
+    unsetUser: () => dispatch(actions.unsetUserInfo()),
+    loadMeta: () => dispatch(actions.loadMeta())
+  }
+}
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loginUser: (token) => dispatch({ type: 'LOGIN_USER', token }),
-        logoutUser: (token) => dispatch({ type: 'LOGOUT_USER' }),
-        closeDialogBox: () => dispatch({ type: 'CLOSE_DIALOG_BOX' })
-    };
-};
-
-export default connect(mapStateToProp, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -1,0 +1,14 @@
+.ControlBar {
+    background-color: var(--entity-color);
+    box-shadow: var(--light-shadow);
+    width: 80px;
+    /* width: 100vw; */
+    /* height: 100vh; */
+}
+
+.ControlBar__modal {
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    background-color: red;
+}

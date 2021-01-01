@@ -1,0 +1,11 @@
+.Dropdown {
+    margin-top: 30px;
+}
+
+.Dropdown__label {
+    color: var(--light-gray);
+    font-size: var(--text-xs);
+    font-weight: var(--fontweight-medium);
+    margin-left: 1px;
+    margin-bottom: 5px;
+}

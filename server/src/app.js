@@ -10,6 +10,8 @@ require('./db/mongoose');
 const pageRouter = require('./api/content/Page')
 const pageGroupRouter = require('./api/content/PageGroup')
 const dataBlockRouter = require('./api/content/DataBlock')
+const dataBlockTemplateRouter = require('./api/content/DataBlockTemplate')
+const userRouter = require('./api/auth/User')
 
 
 // SETUP LOGGING MIDDLEWARE
@@ -28,5 +30,7 @@ app.use(loggerMiddleware);
 app.use('/page', pageRouter)
 app.use('/pageGroup', pageGroupRouter)
 app.use('/dataBlock', dataBlockRouter)
+app.use('/template', dataBlockTemplateRouter)
+app.use('/user', userRouter)
 
 module.exports = app;

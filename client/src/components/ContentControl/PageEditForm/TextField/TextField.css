@@ -1,0 +1,18 @@
+.textfield {
+    margin-bottom: 16px;
+}
+
+.textfield input {
+    width: 60%;
+    height: 32px;
+    margin-top: 4px;
+    border: 1px solid #58788f6b;
+    outline: none;
+    border-radius: 5px;
+    font-size: 14px;
+    padding-left: 12px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    /* background-color: green; */
+
+}
