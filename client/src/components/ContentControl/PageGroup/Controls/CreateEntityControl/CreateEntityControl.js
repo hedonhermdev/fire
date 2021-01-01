@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import api from '../../../../../axios'
+import * as actions from '../../../../../store/actions/index'
 
 import Control from '../../../../Control/Control'
 import { FaPlus } from 'react-icons/fa'
@@ -37,8 +39,8 @@ const CreateEntityControl = (props) => {
         entityType: entityOpts[0],
         name: '',
         template: pageTemplateOpts[0],
+        loading: false
     })
-    console.log(state)
 
     function handleChange(key, value) {
         console.log(value)
@@ -60,6 +62,46 @@ const CreateEntityControl = (props) => {
         setState(newState)
     }
 
+    function handleSubmit() {
+        setState({...state, loading: true})
+        if (state.entityType.id === 'PAGE') {
+            const opts = {
+                name: state.name,
+                template: state.template.value,
+                parentGroup: props.parentGroup._id
+            }
+            api.post('/page', opts)
+                .then((response) => {
+                    const page = response.data
+                    props.addPage(page)
+                    setState({ ...state, loading: false })
+                })
+                .catch((e) => {
+                    console.log(e)
+                    setState({ ...state, loading: false })
+                })
+        }
+        else {
+            const opts = {
+                name: state.name,
+                parentGroup: props.parentGroup._id
+            }
+            if (state.template.value) {
+                opts.template = state.template.value
+            }
+            api.post('/pageGroup', opts)
+                .then((response) => {
+                    const pg = response.data
+                    props.addPageGroup(pg)
+                    setState({ ...state, loading: false })
+                })
+                .catch((e) => {
+                    console.log(e)
+                    setState({ ...state, loading: false })
+                })
+        }
+    }
+
     const templateOpts = state.entityType.id === 'PAGE' ? pageTemplateOpts : pgTemplateOpts
 
     return (
@@ -75,6 +117,7 @@ const CreateEntityControl = (props) => {
                 templateOpts={templateOpts}
                 entityType={state.entityType}
                 onChange={(key, val) => handleChange(key, val)}
+                onSubmit={handleSubmit}
             />
         </Control>
     )
@@ -84,8 +127,15 @@ const mapStateToProps = (state) => {
     return {
         pageTemplates: state.meta.pageTemplates,
         pgTemplates: state.meta.pgTemplates,
-        navData: state.content.data
+        parentGroup: state.content.pageGroup
     }
 }
 
-export default connect(mapStateToProps)(CreateEntityControl)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addPageGroup: (pageGroup) => dispatch(actions.addPageGroup(pageGroup)),
+        addPage: (page) => dispatch(actions.addPage(page))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateEntityControl)

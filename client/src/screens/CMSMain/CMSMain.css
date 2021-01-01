@@ -10,16 +10,20 @@
 }
 
 .MainArea {
-    /* background-color: aqua; */
-    /* background-color: tomato; */
     position: relative;
     display: flex;
     width: 100%;
-    /* background-color: aqua; */
-    /* flex: 1 1 auto; */
+    flex: 1 1 auto;
 }
 
 .MainArea__contentWrapper {
-    /* background-color: green; */
+    display: flex;
     width: 100%;
 }
+
+/* .MainArea__contentWrapper {
+    width: 100%;
+    background-color: green;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(360px, 1fr));
+} */

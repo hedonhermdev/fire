@@ -7,7 +7,20 @@ const initialState = {
     breadCrumb: [],
     loading: true,
     entityType: 'PAGE_GROUP',
-    data: {}
+    pageGroup: {
+        pageGroups: [],
+        pages: [],
+        _id: '',
+        name: '',
+        baseUrl: ''
+    },
+    page: {
+        _id: '',
+        active: false,
+        name: '',
+        url: '',
+        dataBlock: null
+    }
 }
 
 const openEntityStart = (state, action) => {
@@ -25,8 +38,28 @@ const openEntityFail = (state, action) => {
 }
 
 const setContent = (state, action) => {
+    let updateObj = {}
+    if (action.entityType === 'PAGE') {
+        updateObj = {
+            _id: {$set: action.data._id},
+            active: {$set: action.data.active},
+            name: {$set: action.data.name},
+            url: {$set: action.data.url},
+            dataBlock: {$set: action.data.dataBlock}
+        }
+    }
+    else {
+        updateObj = {
+            _id: {$set: action.data._id},
+            name: {$set: action.data.name},
+            pageGroups: {$set: action.data.pageGroups},
+            pages: {$set: action.data.pages},
+            baseUrl: {$set: action.data.baseUrl}
+        }
+    }
     const newState = update(state, {
         data: {$set: action.data},
+        [action.entityType === 'PAGE' ? 'page' : 'pageGroup']: updateObj,
         loading: {$set: false},
         entityType: {$set: action.entityType},
         breadCrumb: {
@@ -53,6 +86,32 @@ const setContent = (state, action) => {
     return newState
 }
 
+const addPageGroup = (state, action) => {
+    return update(state, {
+        pageGroup: {
+            pageGroups: {
+                $push: [{
+                    name: action.pageGroup.name,
+                    _id: action.pageGroup._id
+                }]
+            }
+        }
+    })
+}
+
+const addPage = (state, action) => {
+    return update(state, {
+        pageGroup: {
+            pages: {
+                $push: [{
+                    name: action.page.name,
+                    _id: action.page._id
+                }]
+            }
+        }
+    })
+}
+
 const saveContentStart = (state, action) => {
     return update(state, {
         data: {
@@ -76,6 +135,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_CONTENT: return setContent(state, action)
         case actionTypes.SAVE_PAGE_CONTENT_START: return saveContentStart(state, action)
         case actionTypes.SAVE_PAGE_CONTENT_FAIL: return saveContentFail(state, action)
+        case actionTypes.ADD_PAGE_GROUP: return addPageGroup(state, action)
+        case actionTypes.ADD_PAGE: return addPage(state, action)
         default: return state
     }
 }

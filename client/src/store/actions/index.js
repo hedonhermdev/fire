@@ -1,7 +1,9 @@
 export {
     openEntity,
     openRoot,
-    saveContent
+    saveContent,
+    addPageGroup,
+    addPage
 } from './content'
 
 export {

@@ -7,16 +7,6 @@ import Switch from '../../../../../Switch/Switch'
 
 import './NewEntityForm.css'
 
-const options = [
-    {
-        label: 'PAGE',
-        id: 'PAGE'
-    },
-    {
-        label: 'PAGE GROUP',
-        id: 'PAGE_GROUP'
-    }    
-]
 
 function getBaseUrl(parentGroup, childName) {
     let parentUrl = ''
@@ -64,9 +54,12 @@ const NewEntityForm = (props) => {
                 BASE URL
             </div>
             <div className='NewEntityForm__url__value'>
-                {getBaseUrl(props.navData, props.name)}
+                {getBaseUrl(props.pageGroup, props.name)}
             </div>
-            <div className='NewEntityForm__submitBtn'>
+            <div
+                className='NewEntityForm__submitBtn'
+                onClick={props.onSubmit}
+            >
                 Create
             </div>
         </div>
@@ -79,7 +72,7 @@ const mapStateToProps = (state) => {
     return {
         pageTemplates: state.meta.pageTemplates,
         pgTemplates: state.meta.pgTemplates,
-        navData: state.content.data
+        pageGroup: state.content.pageGroup
     }
 }
 

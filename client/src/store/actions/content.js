@@ -41,6 +41,20 @@ const saveContentFail = () => {
     }
 }
 
+export const addPageGroup = (pageGroup) => {
+    return {
+        type: actionTypes.ADD_PAGE_GROUP,
+        pageGroup
+    }
+}
+
+export const addPage = (page) => {
+    return {
+        type: actionTypes.ADD_PAGE,
+        page
+    }
+}
+
 export const saveContent = ({ id, data, type }) => {
     return (dispatch) => {
         dispatch(saveContentStart(data))

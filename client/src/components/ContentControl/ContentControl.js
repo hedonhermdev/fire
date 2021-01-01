@@ -20,8 +20,8 @@ const ContentControl = (props) => {
     if (!props.loading) {
         content = (
             props.entityType === 'PAGE_GROUP' 
-                ? <PageGroup data={props.navData}/>
-                : <Page data={props.navData}/>
+                ? <PageGroup data={props.pageGroup}/>
+                : <Page data={props.page}/>
         )
     }
 
@@ -35,9 +35,10 @@ const ContentControl = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        navData: state.content.data,
         entityType: state.content.entityType,
-        loading: state.content.loading
+        loading: state.content.loading,
+        pageGroup: state.content.pageGroup,
+        page: state.content.page
     }
 }
 
