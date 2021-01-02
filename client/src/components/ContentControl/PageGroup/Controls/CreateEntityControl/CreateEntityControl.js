@@ -34,6 +34,12 @@ const CreateEntityControl = (props) => {
             label: 'None'
         }
     ]
+    props.pgTemplates.forEach((pgTemplate) => {
+        pgTemplateOpts.push({
+            value: pgTemplate._id,
+            label: pgTemplate.name
+        })
+    })
 
     const [state, setState] = useState({
         entityType: entityOpts[0],

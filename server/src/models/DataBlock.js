@@ -54,8 +54,8 @@ const compareWithTemplateHelper = (template, data) => {
             // If the value against the templateKey is an object which contains the
             // key "contentType", this value is equivalent to a value like 'richtext',
             // 'text' or 'image'.
-            if (template[key].contentType != undefined) {
-                if (jsType(template[key].contentType) != typeof dataVal) {
+            if (template[key].contentType !== undefined) {
+                if (jsType(template[key].contentType) !== typeof dataVal) {
                     return false
                 }
                 console.log(`property ${key} matches`)
@@ -64,28 +64,33 @@ const compareWithTemplateHelper = (template, data) => {
             // of such blocks.
             else {
                 if (typeof dataVal != 'object') {
+                    console.log(`property ${key} failed 1`)
                     return false
                 }
 
                 const meta = template[key]._meta
                 if (!meta) {
+                    console.log(`property ${key} failed 2`)
                     return false
                 }
 
                 if (typeof (meta.quantity) === 'number') {
                     if (meta.quantity === 1) {
                         if (!compareWithTemplateHelper(template[key], dataVal)) {
+                            console.log(`property ${key} failed 3`)
                             return false
                         }
                     }
                     else {
                         if ((!Array.isArray(dataVal)) ||
-                            (dataVal.length != meta.quantity)) {
+                            (dataVal.length !== -1 && dataVal.length !== meta.quantity)) {
+                                console.log(`property ${key} failed 4`)
                                 return false
                             }
                         
                         let isValid = dataVal.every((val) => compareWithTemplateHelper(template[key], val))
                         if (!isValid) {
+                            console.log(`property ${key} failed 5`)
                             return false
                         }
                     }
@@ -96,10 +101,12 @@ const compareWithTemplateHelper = (template, data) => {
                     // If the value is not an array or is an array not satisfying
                     // the size constraints, return false straight away
                     if (!Array.isArray(dataVal)) {
+                        console.log(`property ${key} failed 6`)
                         return false
                     }
                     if ((max && dataVal.length > max) ||
                         (min && dataVal.length < min)) {
+                            console.log(`property ${key} failed 7`)
                         return false
                     }
 
@@ -108,15 +115,18 @@ const compareWithTemplateHelper = (template, data) => {
                     // this whole verification is just an extra precaution and
                     // we surely don't wanna let it slow everything down.
                     if (!max) {
-                        const idx = parseInt(Math.random() * dataVal.length)
-                        if (!compareWithTemplateHelper(template[key], dataVal[idx])) {
-                            return true
+                        if (dataVal.length > 0) {
+                            const idx = parseInt(Math.random() * dataVal.length)
+                            if (!compareWithTemplateHelper(template[key], dataVal[idx])) {
+                                return true
+                            }
                         }
                         continue
                     }
 
                     let isValid = dataVal.every((val) => compareWithTemplateHelper(template[key], val))
                     if (!isValid) {
+                        console.log(`property ${key} failed 8`)
                         return false
                     }
                 }
@@ -150,6 +160,8 @@ function createFromTemplateHelper (template) {
             (typeof val === 'object' && val.contentType)) {
             return result[key] = ""
         }
+
+        console.log(val)
 
         const meta = val._meta
         const quantity = meta.quantity
@@ -199,6 +211,10 @@ dataBlockSchema.methods.performValidation = async function () {
 
     const dataIsValid = DataBlock.compareWithTemplate(dataBlockTemplate, this.data)
     if (!dataIsValid) {
+        console.log('#####################\n\n\n')
+        console.log('template', dataBlockTemplate)
+        console.log('data', this.data)
+        console.log('#####################\n\n\n')
         const err = new Error(`Invalid data structure`)
         err.status = 400
         throw err

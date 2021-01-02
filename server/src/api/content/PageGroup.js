@@ -4,6 +4,8 @@ const PageGroup = require('../../models/PageGroup')
 const PageGroupTemplate = require('../../models/PageGroupTemplate')
 
 const auth = require('../../middleware/auth')
+const DataBlock = require('../../models/DataBlock')
+const DataBlockTemplate = require('../../models/DataBlockTemplate')
 
 const getRoot = async (req, res) => {
     const pageGroup = await PageGroup.withPopulatedData(
@@ -53,17 +55,43 @@ const createPageGroup = async (req, res) => {
 
     let pgTemplate = null
     if (args.template) {
-        pgTemplate = await PageGroupTemplate.findById(args.template)
+        
+        pgTemplate = await PageGroupTemplate.findById(args.template).populate('dataBlockTemplate')
         if (!pgTemplate) {
             return res.status(400).send({
                 message: `PageGroup template of id ${args.template} does not exist`
             })
         }
-        // TODO: add pages according to template
+        
+        // Create dataBlock to be used as shared data for the PageGroup
+        const pgData = DataBlock.createFromTemplate(pgTemplate.dataBlockTemplate)
+        pageGroup.dataBlock = pgData
+        await pgData.save()
+
+        // Add pages according to template
+        const {pages = []} = pgTemplate.pageGroupStructure
+        if (pages.length !== 0) {
+            let pageTemplates = await DataBlockTemplate.find({ templateType: 'PAGE' })
+            for (let i = 0; i < pages.length; i++) {
+                const page = pages[i]
+                const template = pageTemplates.find((pgt) => pgt.name === page.template)
+                const newPage = new Page({
+                    name: page.name,
+                    template: template,
+                    parentGroup: pageGroup
+                })
+                newPage.url = await newPage.getUrl()
+                const pageData = DataBlock.createFromTemplate(template)
+                newPage.dataBlock = pageData
+                await pageData.save()
+                await newPage.save()
+                pageGroup.pages = pageGroup.pages.concat(newPage._id)
+            }
+        }
     }
 
-
     await pageGroup.save()
+
     return res.status(201).send(pageGroup)
 }
 
@@ -126,7 +154,13 @@ const updateData = async (req, res) => {
     }
 }
 
+const getTemplates = async (req, res) => {
+    const pgTemplates = await PageGroupTemplate.find({}).populate('dataBlockTemplate')
+    return res.status(200).send(pgTemplates)
+}
+
 const router = new express.Router()
+router.get('/template', auth, getTemplates)
 router.get('/root', auth, getRoot)
 router.get('/:id', auth, getPageGroup)
 router.post('/', auth, createPageGroup)
