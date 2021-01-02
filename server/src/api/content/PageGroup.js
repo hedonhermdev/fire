@@ -141,7 +141,7 @@ const deletePageGroup = async (req, res) => {
 
 const updateData = async (req, res) => {
     try {
-        const pg = await (await PageGroup.findById(req.params.id)).populated('dataBlock')
+        const pg = await PageGroup.findById(req.params.id).populate('dataBlock')
         const dataBlock = pg.dataBlock
         dataBlock.data = req.body.data
         console.log(req.body)
@@ -162,9 +162,9 @@ const getTemplates = async (req, res) => {
 const router = new express.Router()
 router.get('/template', auth, getTemplates)
 router.get('/root', auth, getRoot)
+router.post('/updateData/:id', auth, updateData)
 router.get('/:id', auth, getPageGroup)
 router.post('/', auth, createPageGroup)
-router.post('/updateData/:id', auth, updateData)
 router.put('/:id', auth, modifyPageGroup)
 router.delete('/:id', auth, deletePageGroup)
 

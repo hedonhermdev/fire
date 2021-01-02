@@ -43,6 +43,13 @@ pageGroupSchema.statics.withPopulatedData = async function(query) {
         path: 'pages',
         model: 'Page',
         select: '_id name active'
+    }).populate({
+        path: 'dataBlock',
+        model: 'DataBlock',
+        populate: {
+            path: 'template',
+            model: 'DataBlockTemplate'
+        }
     })
 
     return pg

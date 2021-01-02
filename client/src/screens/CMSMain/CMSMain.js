@@ -9,6 +9,7 @@ import * as actions from '../../store/actions/index'
 import './CMSMain.css'
 import ControlBar from '../../components/ControlBar/ControlBar'
 import CreateEntityControl from '../../components/ContentControl/PageGroup/Controls/CreateEntityControl/CreateEntityControl'
+import SharedDataControl from '../../components/ContentControl/PageGroup/Controls/SharedDataControl/SharedDataControl'
 
 
 const CMSMain = (props) => {
@@ -36,6 +37,7 @@ const CMSMain = (props) => {
                         </div>
                         <ControlBar>
                             <CreateEntityControl/>
+                            <SharedDataControl/>
                         </ControlBar>
                     </div>
             }

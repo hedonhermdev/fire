@@ -51,7 +51,7 @@ function generateFormObject(formData, formStructure) {
         
         // const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
 
-        const val = formData[key]
+        let val = formData[key]
         
         if (typeof val === 'string') {
             let valueType
