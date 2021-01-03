@@ -90,6 +90,7 @@ const createPageGroup = async (req, res) => {
         }
     }
 
+    pageGroup.path = await pageGroup.getPath()
     await pageGroup.save()
 
     return res.status(201).send(pageGroup)

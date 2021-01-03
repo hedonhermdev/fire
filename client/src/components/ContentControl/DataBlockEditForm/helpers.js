@@ -3,7 +3,6 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
 import draftToHtml from 'draftjs-to-html'
 
-import "./PageEditForm.css"
 
 export function htmlToEditorState(html) {
     const { contentBlocks, entityMap} = htmlToDraft(html)

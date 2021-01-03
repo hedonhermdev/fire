@@ -31,6 +31,19 @@ pageSchema.statics.allowedUpdates = () => {
     return ['name', 'active']
 }
 
+pageSchema.statics.withPath = function(query) {
+    const newQuery = query.populate({
+        path: 'parentGroup',
+        model: 'PageGroup',
+        populate: {
+            path: 'path',
+            model: 'PageGroup',
+            select: '_id name'
+        }
+    })
+    return newQuery
+}
+
 pageSchema.methods.performValidation = async function () {
     const err = new Error('bad request')
     err.status = 400

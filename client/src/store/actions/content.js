@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes'
-import * as actions from './index'
 import api from '../../axios'
 
 const openEntityStart = () => {

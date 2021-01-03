@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { FaChevronRight } from 'react-icons/fa'
 import * as actions from '../../../store/actions/index'
@@ -9,32 +10,30 @@ import './BreadCrumb.css'
 const BreadCrumb = (props) => {
 
     const breadCrumb = []
-    const lastidx = props.data.length - 1
-    props.data.forEach((entry, idx) => {
-        let className = 'BreadCrumb__entry'
-        if (idx === lastidx) {
-            className += ' BreadCrumb__entry__highlighted'
-        }
-        console.log(className)
+
+    props.breadCrumbData.forEach((entry) => {
         breadCrumb.push(
-            <div 
-                className={className}
-                onClick={() => props.navigateToEntity({
-                    name: entry.name,
-                    id: entry.id
-                })}
+            <Link
+                to={`/content/pageGroup/${entry._id}`}
+                style={{ textDecoration: 'none' }}
             >
-                {entry.name}
-            </div>
+                <div className='BreadCrumb__entry'>
+                    {entry.name === '__main' ? 'Home' : entry.name}
+                </div>
+            </Link>
         )
         breadCrumb.push(
             <div className='BreadCrumb__rightIcon'>
-                {/* <FaChevronRight/> */}
                 /
             </div>
         )
     })
-    breadCrumb.pop()
+    
+    breadCrumb.push((
+        <div className='BreadCrumb__entry BreadCrumb__entry__highlighted'>
+            {props.currentEntityName === '__main' ? 'Home' : props.currentEntityName}
+        </div>
+    ))
 
     return (
         <div className='BreadCrumb'>
@@ -45,7 +44,9 @@ const BreadCrumb = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.content.breadCrumb
+        data: state.content.breadCrumb,
+        breadCrumbData: state.nav.breadCrumb,
+        currentEntityName: state.nav.currentEntityName
     }
 }
 

@@ -19,7 +19,7 @@ import {
     reorder
 } from './helpers'
 
-import "./PageEditForm.css"
+import "./DataBlockEditForm.css"
 
 
 const DataBlockEditForm = (props) => {
@@ -250,8 +250,9 @@ const ContentBlockForm = (props) => {
         )
     }
 
+    const backgroundColor = props.root ? 'var(--background-color)' : 'var(--entity-color)'
     const content = (
-        <div style={{backgroundColor: "#fff"}}>
+        <div style={{backgroundColor: backgroundColor}}>
             <div
                 style={{
                     padding: "15px"

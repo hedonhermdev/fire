@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Page = require('./Page')
 
 const pageGroupSchema = new mongoose.Schema({
     name: {
@@ -27,7 +28,11 @@ const pageGroupSchema = new mongoose.Schema({
     dataBlock: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DataBlock'
-    }
+    },
+    path: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PageGroup'
+    }]
 })
 
 pageGroupSchema.statics.allowedUpdates = function () {
@@ -50,9 +55,29 @@ pageGroupSchema.statics.withPopulatedData = async function(query) {
             path: 'template',
             model: 'DataBlockTemplate'
         }
+    }).populate({
+        path: 'path',
+        model: 'PageGroup',
+        select: '_id name'
     })
 
     return pg
+}
+
+pageGroupSchema.methods.getPath = async function() {
+    if (!this.parentGroup) {
+        return []
+    }
+
+    if (!this.parentGroup.path) {
+        await this.populate('parentGroup').execPopulate()
+    }
+
+    const path = this.parentGroup.path.concat(
+        this.parentGroup._id
+    )
+
+    return path
 }
 
 pageGroupSchema.methods.getBaseUrl = async function() {
@@ -63,15 +88,15 @@ pageGroupSchema.methods.getBaseUrl = async function() {
         return this.name
     }
 
+    let parentUrl = ''
     if (!this.populated('parentGroup')) {
-        await this.populate({
-            path: 'parentGroup',
-            model: 'PageGroup',
-            select: 'baseUrl'
-        }).execPopulate()
+        const parentGroup = await PageGroup.findById(this.parentGroup)
+        parentUrl = parentGroup.baseUrl
+    }
+    else {
+        parentUrl = this.parentGroup.baseUrl
     }
 
-    const parentUrl = this.parentGroup.baseUrl
     if (parentUrl === '') {
         return this.name
     }

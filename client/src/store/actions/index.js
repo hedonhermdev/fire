@@ -16,3 +16,7 @@ export {
 export {
     loadMeta
 } from './meta'
+
+export {
+    updateBreadCrumb
+} from './nav'

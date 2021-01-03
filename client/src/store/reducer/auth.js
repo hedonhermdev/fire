@@ -5,7 +5,7 @@ const initialState = {
     error: null,
     user: null,
     token: '',
-    isAuthenticated: false
+    isAuthenticated: true
 }
 
 const setUser = (state, action) => {
@@ -20,7 +20,8 @@ const setUser = (state, action) => {
         loading: false,
         error: null,
         user: action.user,
-        token: action.token
+        token: action.token,
+        isAuthenticated: true
     }
 }
 
@@ -32,7 +33,8 @@ const unsetUser = (state, action) => {
         ...state,
         user: null,
         token: '',
-        loading: false
+        loading: false,
+        isAuthenticated: false
     }
 }
 

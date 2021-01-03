@@ -11,11 +11,10 @@ import * as actions from './store/actions/index'
 
 
 const App = (props) => {
+  const token = localStorage.getItem('token')
+  const username = localStorage.getItem('username')
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const username = localStorage.getItem('username')
-
     if (token) {
       props.setUser({ username, token })
     }
@@ -25,8 +24,8 @@ const App = (props) => {
   }, [])
 
 
-  if (props.token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${props.token}`
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     
     // Loading all metadata needed for CMS functioning.
     // TODO: Move to a separate function?
@@ -42,13 +41,13 @@ const App = (props) => {
       
       <Route
         path='/'
-        render={() => !!props.token ? <CMSMain/> : <Redirect to='/login'/>}
+        render={() => !!props.isAuthenticated ? <CMSMain/> : <Redirect to='/login'/>}
       />
 
       <Route
         path='/login'
         exact
-        render={() => !!props.token ? <Redirect to='/' /> : <Auth/>}
+        render={() => !!props.isAuthenticated ? <Redirect to='/content' /> : <Auth/>}
       />
 
     </div>   

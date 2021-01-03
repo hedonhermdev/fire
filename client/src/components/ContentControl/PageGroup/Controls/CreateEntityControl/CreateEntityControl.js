@@ -74,7 +74,7 @@ const CreateEntityControl = (props) => {
             const opts = {
                 name: state.name,
                 template: state.template.value,
-                parentGroup: props.parentGroup._id
+                parentGroup: props.currentPageGroup._id
             }
             api.post('/page', opts)
                 .then((response) => {
@@ -90,7 +90,7 @@ const CreateEntityControl = (props) => {
         else {
             const opts = {
                 name: state.name,
-                parentGroup: props.parentGroup._id
+                parentGroup: props.currentPageGroup._id
             }
             if (state.template.value) {
                 opts.template = state.template.value
@@ -110,6 +110,7 @@ const CreateEntityControl = (props) => {
 
     const templateOpts = state.entityType.id === 'PAGE' ? pageTemplateOpts : pgTemplateOpts
 
+    console.log('YOOO', props.currentPageGroup)
     return (
         <Control
             icon={<FaPlus/>}
@@ -124,6 +125,7 @@ const CreateEntityControl = (props) => {
                 entityType={state.entityType}
                 onChange={(key, val) => handleChange(key, val)}
                 onSubmit={handleSubmit}
+                currentPageGroup={props.currentPageGroup}
             />
         </Control>
     )
@@ -137,11 +139,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addPageGroup: (pageGroup) => dispatch(actions.addPageGroup(pageGroup)),
-        addPage: (page) => dispatch(actions.addPage(page))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateEntityControl)
+export default connect(mapStateToProps)(CreateEntityControl)

@@ -54,7 +54,7 @@ const NewEntityForm = (props) => {
                 BASE URL
             </div>
             <div className='NewEntityForm__url__value'>
-                {getBaseUrl(props.pageGroup, props.name)}
+                {getBaseUrl(props.currentPageGroup, props.name)}
             </div>
             <div
                 className='NewEntityForm__submitBtn'

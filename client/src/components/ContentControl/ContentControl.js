@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
 import BreadCrumb from './BreadCrumb/BreadCrumb'
 import Page from './Page/Page'
@@ -11,44 +11,29 @@ import CreateEntityControl from './PageGroup/Controls/CreateEntityControl/Create
 import SharedDataControl from './PageGroup/Controls/SharedDataControl/SharedDataControl'
 
 const ContentControl = (props) => {
-    console.log('ContentControl was re-rendered')
-    let content = (
-        <div>
-            
-        </div>
-    )
-    
-    console.log('props.loading is', props.loading)
-
-    if (!props.loading) {
-        content = (
-            props.entityType === 'PAGE_GROUP' 
-                ? <PageGroup data={props.pageGroup}/>
-                : <Page data={props.page}/>
-        )
-    }
-
     return (
         <div className='ContentControl__wrapper'>
             <div className='ContentControl'>
-                <BreadCrumb/>
-                {content}
+                {/* <BreadCrumb/> */}
+                
+                <Route
+                    path={`/content/pageGroup/:id`}
+                    render={() => <PageGroup/>}
+                />
+
+                <Route
+                    path={`/content/page/:id`}
+                    render={() => <Page/>}
+                />
             </div>
-            <ControlBar>
+            {/* <ControlBar>
                 <CreateEntityControl/>
                 <SharedDataControl/>
-            </ControlBar>
+            </ControlBar> */}
         </div>
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        entityType: state.content.entityType,
-        loading: state.content.loading,
-        pageGroup: state.content.pageGroup,
-        page: state.content.page
-    }
-}
 
-export default connect(mapStateToProps)(ContentControl)
+
+export default ContentControl

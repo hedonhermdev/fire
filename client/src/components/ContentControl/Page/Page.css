@@ -1,0 +1,13 @@
+.Page__wrapper {
+    /* background-color: green; */
+    display: flex;
+    height: 100%;
+    padding-left: 50px;
+}
+
+.Page {
+    flex: 1 1 auto;
+    height: 100%;
+    padding-top: 15px;
+    box-sizing: border-box;
+}
