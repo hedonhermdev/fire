@@ -23,17 +23,12 @@ import "./DataBlockEditForm.css"
 
 
 const DataBlockEditForm = (props) => {
-    const { data, template, loading } = props
-    const formData = generateFormObject(data, template)
-
-    const [formState, setFormState] = useState(formData)
+    const { formState, template } = props
 
     const updateFormData = (updateObj) => {
         const newFormState = update(formState, updateObj)
-        setFormState(newFormState)
+        props.onUpdate(newFormState)
     }
-
-    console.log(formState)
 
     return (
             <ContentBlockForm
@@ -45,7 +40,6 @@ const DataBlockEditForm = (props) => {
                 index={props.index}
                 level={0}
                 root
-                loading={loading}
             />
     )
 }
@@ -232,25 +226,7 @@ const ContentBlockForm = (props) => {
         }
     })
 
-    let saveButton = (
-        <div
-            className="FormSaveButton"
-            onClick={props.onSave}
-        >
-            Save
-        </div>
-    )
-    if (props.loading) {
-        saveButton = (
-            <div
-                className='FormSaveButton'
-            >
-                Loading...
-            </div>
-        )
-    }
-
-    const backgroundColor = props.root ? 'var(--background-color)' : 'var(--entity-color)'
+    const backgroundColor = props.root ? 'transparent' : 'var(--entity-color)'
     const content = (
         <div style={{backgroundColor: backgroundColor}}>
             <div
@@ -261,11 +237,6 @@ const ContentBlockForm = (props) => {
                 {form}
                 
             </div>
-            {
-                props.root
-                ?   saveButton
-                :   null
-            }
             {
                 deleteable
                 ?   <div

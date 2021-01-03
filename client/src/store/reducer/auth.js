@@ -12,9 +12,6 @@ const setUser = (state, action) => {
     localStorage.setItem('token', action.token)
     localStorage.setItem('username', action.username)
 
-    console.log(action)
-    console.log('bruh')
-
     return {
         ...state,
         loading: false,
@@ -39,7 +36,6 @@ const unsetUser = (state, action) => {
 }
 
 const loginStart = (state, action) => {
-    console.log('loginstart')
     return {
         ...state,
         loading: true

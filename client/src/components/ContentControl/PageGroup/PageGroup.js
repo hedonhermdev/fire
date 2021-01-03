@@ -14,6 +14,18 @@ import ControlBar from '../../ControlBar/ControlBar'
 import CreateEntityControl from './Controls/CreateEntityControl/CreateEntityControl'
 import SharedDataControl from './Controls/SharedDataControl/SharedDataControl'
 import BreadCrumb from '../BreadCrumb/BreadCrumb'
+import { generateFormData, generateFormObject } from '../DataBlockEditForm/helpers'
+
+function getFormObject(dataBlock) {
+    if (!dataBlock || !dataBlock.data) {
+        return null
+    }
+    if (!dataBlock.template || !dataBlock.template.structure) {
+        return null
+    }
+
+    return generateFormObject(dataBlock.data, dataBlock.template.structure)
+}
 
 const EntityIcon = (props) => {
     let icon = (
@@ -53,17 +65,20 @@ const PageGroup = (props) => {
             name: '',
             baseUrl: '',
             dataBlock: null
-        }
+        },
+        formState: null
     })
 
     useEffect(() => {
         setState({...state, loading: true})
         api.get(`/pageGroup/${id}`)
             .then((response) => {
+                const formState = getFormObject(response.data.dataBlock)
                 setState({
                     ...state,
                     loading: false,
-                    pageGroup: response.data
+                    pageGroup: response.data,
+                    formState: formState
                 })
                 props.updateBreadCrumb(response.data.path, response.data.name)
             })
@@ -94,6 +109,26 @@ const PageGroup = (props) => {
                         name: pageGroup.name,
                         _id: pageGroup._id
                     }]
+                }
+            }
+        }))
+    }
+
+    function handleFormStateUpdate(newFormState) {
+        setState(update(state, {
+            formState: {
+                $set: newFormState
+            }
+        }))
+    }
+
+    function setDataBlock(data) {
+        setState(update(state, {
+            pageGroup: {
+                dataBlock: {
+                    data: {
+                        $set: data
+                    }
                 }
             }
         }))
@@ -163,7 +198,13 @@ const PageGroup = (props) => {
                     addPage={handleAddPage}
                     addPageGroup={handleAddPageGroup}
                 />
-                <SharedDataControl/>
+                <SharedDataControl
+                    currentPageGroup={state.pageGroup}
+                    formState={state.formState}
+                    onUpdate={handleFormStateUpdate}
+                    template={state.pageGroup.dataBlock?.template?.structure}
+                    onSave={setDataBlock}
+                />
             </ControlBar>
         </div>
     )

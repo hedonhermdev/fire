@@ -23,8 +23,6 @@ const getPageGroup = async (req, res) => {
     const pageGroup = await PageGroup.withPopulatedData(
         PageGroup.findById(req.params.id)
     )
-    console.log(req.params.id)
-    console.log(pageGroup)
     return res.status(200).send(pageGroup)
 }
 
@@ -38,7 +36,6 @@ const createPageGroup = async (req, res) => {
 
     const pageGroup = new PageGroup(args)
     pageGroup.baseUrl = await pageGroup.getBaseUrl()
-    console.log('baseUrl', pageGroup.baseUrl === '')
 
     let parentGroup = null
     if (args.parentGroup) {
@@ -48,7 +45,6 @@ const createPageGroup = async (req, res) => {
                 message: `PageGroup with id ${args.parentGroup} does not exist`
             })
         }
-        console.log(parentGroup)
         parentGroup.pageGroups = parentGroup.pageGroups.concat(pageGroup._id)
         await parentGroup.save()
     }
@@ -147,7 +143,6 @@ const updateData = async (req, res) => {
         )
         const dataBlock = pg.dataBlock
         dataBlock.data = req.body.data
-        console.log(req.body)
         await dataBlock.save()
         return res.status(200).send(pg)
     }

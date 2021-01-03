@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 
 import api from '../../../../../axios'
@@ -10,24 +10,12 @@ import DataBlockEditForm from '../../../DataBlockEditForm/DataBlockEditForm'
 
 import { generateFormData, generateFormObject } from '../../../DataBlockEditForm/helpers'
 
-function getFormObject(dataBlock) {
-    if (!dataBlock || !dataBlock.data) {
-        return null
-    }
-    if (!dataBlock.template || !dataBlock.template.structure) {
-        return null
-    }
-
-    return generateFormObject(dataBlock.data, dataBlock.template.structure)
-}
+import './SharedDataControl.css'
 
 const SharedDataControl = (props) => {
     const [state, setState] = useState({
-        loading: false,
-        formState: getFormObject(props.pageGroup.dataBlock)
+        loading: false
     })
-
-    console.log('STATE IS', state)
 
     let comp = (
         <div>
@@ -36,15 +24,18 @@ const SharedDataControl = (props) => {
     )
 
     useEffect(() => {
-        console.log('in useEffect')
-    }, [props.pageGroup])
+        setState({
+            ...state,
+            formState: props.formState
+        })
+    }, [props.formState])
 
-    function handleSave(data) {
+    function handleSave(formState) {
+        const data = generateFormData(formState, props.template)
         setState({...state, loading: true})
-        api.post(`/pageGroup/updateData/${props.pageGroup._id}`, {data})
+        api.post(`/pageGroup/updateData/${props.currentPageGroup._id}`, {data})
             .then((response) => {
-                console.log('OK SAVED')
-                props.setContent(data)
+                props.onSave(data)
                 setState({...state, loading: false})
             })
             .catch((e) => {
@@ -54,27 +45,25 @@ const SharedDataControl = (props) => {
     }
 
     function handleUpdate(formState) {
-        return {...state, formState: formState}
+        props.onUpdate(formState)
     }
     
-    if (props.pageGroup.dataBlock && props.pageGroup.dataBlock.template) {
+    if (props.formState) {
         comp = (
-            <DataBlockEditForm
-                formState={state.formState}
-                onUpdate={(formState) => handleUpdate(formState)}
-                data={props.pageGroup.dataBlock.data}
-                template={props.pageGroup.dataBlock.template.structure}
-                onSave={(data) => handleSave(data)}
-                loading={state.loading}
-            />
-        )
-    }
-
-    if (state.loading) {
-        comp = (
-            <div>
-                Loading...
-            </div>
+            <Fragment>
+                <DataBlockEditForm
+                    formState={props.formState}
+                    onUpdate={(formState) => handleUpdate(formState)}
+                    // data={props.pageGroup.dataBlock.data}
+                    template={props.template}
+                />
+                <div
+                    className='SharedDataControl__saveBtn'
+                    onClick={() => handleSave(props.formState)}
+                >
+                    Save
+                </div>
+            </Fragment>
         )
     }
 

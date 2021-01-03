@@ -21,7 +21,6 @@ const getPage = async (req, res) => {
         })
     }
 
-    console.log(page.data)
     return res.status(200).send(page)
 }
 
@@ -117,7 +116,6 @@ const updateData = async (req, res) => {
         const page = await Page.withPath(Page.findById(req.params.id).populate('dataBlock'))
         const dataBlock = page.dataBlock
         dataBlock.data = req.body.data
-        console.log(req.body)
         await dataBlock.save()
         return res.status(200).send(page)
     } catch (e) {

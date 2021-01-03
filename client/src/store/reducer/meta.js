@@ -22,7 +22,6 @@ const loadMetaFail = (state, action) => {
 }
 
 const loadMetaSuccess = (state, action) => {
-    console.log(action)
     return update(state, {
         pageTemplates: {$set: action.pageTemplates},
         pgTemplates: {$set: action.pgTemplates},

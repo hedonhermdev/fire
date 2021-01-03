@@ -2,14 +2,12 @@ import * as actionTypes from './actionTypes'
 import api from '../../axios'
 
 const openEntityStart = () => {
-    console.log('openEntityStart')
     return {
         type: actionTypes.NAV_OPEN_ENTITY_START
     }
 }
 
 const openEntityFail = (error) => {
-    console.log('openEntityFail')
     return {
         type: actionTypes.NAV_OPEN_ENTITY_FAIL,
         error: error
@@ -17,7 +15,6 @@ const openEntityFail = (error) => {
 }
 
 export const setContent = ({data, type}) => {
-    console.log('setContent')
     return {
         type: actionTypes.SET_CONTENT,
         data: data,
@@ -26,7 +23,6 @@ export const setContent = ({data, type}) => {
 }
 
 const saveContentStart = (data) => {
-    console.log('saveContentStart')
     return {
         type: actionTypes.SAVE_PAGE_CONTENT_START,
         data: data
@@ -73,7 +69,6 @@ export const saveContent = ({ id, data, type }) => {
 }
 
 export const openRoot = () => {
-    console.log('openRoot')
     return (dispatch) => {
         dispatch(openEntityStart())
         api.get(`/pageGroup/root`)

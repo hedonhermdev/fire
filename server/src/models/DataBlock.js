@@ -161,8 +161,6 @@ function createFromTemplateHelper (template) {
             return result[key] = ""
         }
 
-        console.log(val)
-
         const meta = val._meta
         const quantity = meta.quantity
         if (quantity === 1) {
@@ -187,9 +185,6 @@ function createFromTemplateHelper (template) {
 }
 
 dataBlockSchema.statics.createFromTemplate = function (template) {
-    // console.log(template)
-    // console.log("BRUHHHH", template._id)
-    // console.log(template.data)
     const data = createFromTemplateHelper(template.structure)
     const datablock = new DataBlock({ data, template: template })
     return datablock
@@ -197,7 +192,6 @@ dataBlockSchema.statics.createFromTemplate = function (template) {
 
 
 dataBlockSchema.methods.performValidation = async function () {
-    console.log(this)
 
     if (!this.populated('template')) {
         await this.populate('template').execPopulate()
@@ -211,10 +205,6 @@ dataBlockSchema.methods.performValidation = async function () {
 
     const dataIsValid = DataBlock.compareWithTemplate(dataBlockTemplate, this.data)
     if (!dataIsValid) {
-        console.log('#####################\n\n\n')
-        console.log('template', dataBlockTemplate)
-        console.log('data', this.data)
-        console.log('#####################\n\n\n')
         const err = new Error(`Invalid data structure`)
         err.status = 400
         throw err
