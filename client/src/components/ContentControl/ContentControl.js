@@ -6,6 +6,9 @@ import Page from './Page/Page'
 import PageGroup from './PageGroup/PageGroup'
 
 import './ContentControl.css'
+import ControlBar from '../ControlBar/ControlBar'
+import CreateEntityControl from './PageGroup/Controls/CreateEntityControl/CreateEntityControl'
+import SharedDataControl from './PageGroup/Controls/SharedDataControl/SharedDataControl'
 
 const ContentControl = (props) => {
     console.log('ContentControl was re-rendered')
@@ -26,9 +29,15 @@ const ContentControl = (props) => {
     }
 
     return (
-        <div className='ContentControl'>
-            <BreadCrumb />
-            {content}
+        <div className='ContentControl__wrapper'>
+            <div className='ContentControl'>
+                <BreadCrumb/>
+                {content}
+            </div>
+            <ControlBar>
+                <CreateEntityControl/>
+                <SharedDataControl/>
+            </ControlBar>
         </div>
     )
 }

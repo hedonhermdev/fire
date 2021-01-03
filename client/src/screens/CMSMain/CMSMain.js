@@ -35,10 +35,10 @@ const CMSMain = (props) => {
                         <div className='MainArea__contentWrapper'>
                             <ContentControl/>
                         </div>
-                        <ControlBar>
+                        {/* <ControlBar>
                             <CreateEntityControl/>
                             <SharedDataControl/>
-                        </ControlBar>
+                        </ControlBar> */}
                     </div>
             }
         </div>

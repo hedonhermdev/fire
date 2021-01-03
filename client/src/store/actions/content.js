@@ -17,7 +17,7 @@ const openEntityFail = (error) => {
     }
 }
 
-const setContent = ({data, type}) => {
+export const setContent = ({data, type}) => {
     console.log('setContent')
     return {
         type: actionTypes.SET_CONTENT,

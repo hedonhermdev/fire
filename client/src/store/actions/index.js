@@ -3,7 +3,8 @@ export {
     openRoot,
     saveContent,
     addPageGroup,
-    addPage
+    addPage,
+    setContent
 } from './content'
 
 export {

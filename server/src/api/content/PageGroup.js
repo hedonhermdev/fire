@@ -141,7 +141,9 @@ const deletePageGroup = async (req, res) => {
 
 const updateData = async (req, res) => {
     try {
-        const pg = await PageGroup.findById(req.params.id).populate('dataBlock')
+        const pg = await PageGroup.withPopulatedData(
+            PageGroup.findById(req.params.id)
+        )
         const dataBlock = pg.dataBlock
         dataBlock.data = req.body.data
         console.log(req.body)

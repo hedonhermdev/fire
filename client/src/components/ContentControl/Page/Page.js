@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import PageEditForm from '../PageEditForm/PageEditForm'
+import DataBlockEditForm from '../DataBlockEditForm/DataBlockEditForm'
 import * as actions from '../../../store/actions/index'
 import './Page.css'
 
 const Page = (props) => {
     return (
         <div className="Page">
-            <PageEditForm
+            <DataBlockEditForm
                 data={props.data.dataBlock.data}
                 template={props.data.dataBlock.template.structure}
                 onSave={(data) => props.savePageData({

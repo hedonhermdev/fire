@@ -1,7 +1,6 @@
 .SideNav {
     background-color: var(--entity-color);
-    /* background-color: transparent; */
-    width: 350px;
+    min-width: 350px;
     padding-left: 30px;
     padding-right: 30px;
     box-sizing: border-box;
@@ -9,7 +8,6 @@
 }
 
 .SideNav__title {
-    /* background-color: green; */
     margin-top: 15px;
     font-size: var(--text-l);
     font-weight: var(--fontweight-bold);
@@ -17,7 +15,6 @@
 }
 
 .SideNav__fastTravel {
-    /* background-color: aqua; */
     box-shadow: var(--heavy-shadow);
     border-radius: var(--border-radius-l);
     margin-top: 40px;
@@ -38,15 +35,11 @@
 }
 
 .SideNav__viewSite {
-    /* background-color: aqua; */
     margin-top: 40px;
-    /* margin-left: auto; */
-    /* margin-right: auto; */
     font-size: var(--text-m);
     display: flex;
     align-items: center;
     padding: 5px 15px;
-    /* width: 300px; */
     border-radius: var(--border-radius-l);
     color: var(--light-gray);
     cursor: pointer;
@@ -63,8 +56,6 @@
 .SideNav__viewSite__label {
     margin-left: 15px;
     font-weight: var(--fontweight-medium);
-    /* transform: translateY(-50px); */
-    /* background-color: green; */
 }
 
 .SideNav__viewSite:hover {
@@ -73,8 +64,6 @@
 }
 
 .SideNav__sectionLabel {
-    /* background-color: aqua; */
-    /* padding: 0px 10px; */
     margin-top: 33px;
     margin-bottom: 13px;
     font-size: var(--text-s);

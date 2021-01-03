@@ -1,6 +1,12 @@
+.ContentControl__wrapper {
+    display: flex;
+    flex: 1 1 auto;
+}
+
 .ContentControl {
-    /* background-color: var(--background-color); */
+    /* background-color: green; */
     padding-left: 50px;
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
 }
