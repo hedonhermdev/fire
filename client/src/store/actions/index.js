@@ -3,7 +3,8 @@ export {
     openRoot,
     saveContent,
     addPageGroup,
-    addPage
+    addPage,
+    setContent
 } from './content'
 
 export {
@@ -15,3 +16,7 @@ export {
 export {
     loadMeta
 } from './meta'
+
+export {
+    updateBreadCrumb
+} from './nav'

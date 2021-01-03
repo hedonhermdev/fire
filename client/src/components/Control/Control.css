@@ -9,7 +9,7 @@
     align-items: center;
     height: 45px;
     width: 50px;
-    margin: 20px auto;
+    margin: 20px auto 0px auto;
     border-radius: var(--border-radius-l);
     box-shadow: var(--heavy-shadow);
     font-size: var(--text-m);

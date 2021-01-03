@@ -5,9 +5,13 @@ const pageGroupTemplateSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    data: {
+    pageGroupStructure: {
         type: Object,
         required: true
+    },
+    dataBlockTemplate: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DataBlockTemplate'
     }
 })
 

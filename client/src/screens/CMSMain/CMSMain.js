@@ -1,5 +1,7 @@
 import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
 import SideNav from '../../components/SideNav/SideNav'
 import ContentControl from '../../components/ContentControl/ContentControl'
@@ -7,11 +9,11 @@ import ContentControl from '../../components/ContentControl/ContentControl'
 import * as actions from '../../store/actions/index'
 
 import './CMSMain.css'
-import ControlBar from '../../components/ControlBar/ControlBar'
-import CreateEntityControl from '../../components/ContentControl/PageGroup/Controls/CreateEntityControl/CreateEntityControl'
+
 
 
 const CMSMain = (props) => {
+    const location = useLocation()
     // Load the root PageGroup for the user
     useEffect(() => {
         if (props.token) {
@@ -30,14 +32,18 @@ const CMSMain = (props) => {
                     </div>
                 )
 
-                :   <div className="MainArea">
-                        <div className='MainArea__contentWrapper'>
-                            <ContentControl/>
-                        </div>
-                        <ControlBar>
-                            <CreateEntityControl/>
-                        </ControlBar>
-                    </div>
+                :   (
+                    <Route
+                        path={`/content`}
+                        render={() => (
+                            <div className="MainArea">
+                                <div className='MainArea__contentWrapper'>
+                                    <ContentControl/>
+                                </div>
+                            </div>
+                        )}
+                    />
+                )
             }
         </div>
     )

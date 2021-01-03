@@ -32,12 +32,12 @@ const Accordion = (props) => {
     if (!props.draggable) {
         return (
             <div
-                className={`accordion__section`}
                 style={{
                     display: "flex",
                     flexDirection: "column",
                     width: width,
-                    transition: "width 0.2s ease"
+                    transition: "width 0.2s ease",
+                    backgroundColor: 'red'
                 }}
             >
                 
@@ -78,14 +78,16 @@ const Accordion = (props) => {
                     {...provided.draggableProps}
                 >
                     <div
-                        className={`accordion__section`}
                         style={{
                             display: "flex",
                             flexDirection: "column",
                             width: width,
-                            borderRadius: "5px",
-                            boxShadow: "0px 0px 8px 4px #799ab11f",
-                            transition: "width 0.2s ease"
+                            borderRadius: "var(--border-radius-l)",
+                            boxShadow: "var(--light-shadow)",
+                            transition: "width 0.2s ease",
+                            ":hover": {
+                                boxShadow: "var(--heavy-shadow)"
+                            }
                         }}
                     >
                         

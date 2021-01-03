@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 require('../src/db/mongoose')
+
 const DataBlockTemplate = require('../src/models/DataBlockTemplate')
 const PageGroupTemplate = require('../src/models/PageGroupTemplate')
 
@@ -27,7 +28,7 @@ const setPageTemplateData = async (name, structure) => {
             quantity: 1
         }
     }
-    const pageTemplate = await DataBlockTemplate.findOne({ name })
+    const pageTemplate = await DataBlockTemplate.findOne({ name, templateType: 'PAGE' })
     if (!pageTemplate) {
         const pgTemplate = new DataBlockTemplate({ name, structure, templateType: 'PAGE' })
         await pgTemplate.save()
@@ -59,41 +60,63 @@ const loadPageTemplates = async (dir) => {
     })
 }
 
-const setPageGroupTemplateData = async (name, data) => {
-    const pageGroupTemplate = await PageGroupTemplate.findOne({ name })
-    if (!pageGroupTemplate) {
-        const pgTemplate = new PageGroupTemplate({ name, data })
-        await pgTemplate.save()
+const setPageGroupTemplateData = async (name, template) => {
+    if (template.data && !template.data._meta) {
+        template.data._meta = {
+            quantity: 1
+        }
+    }
+    const pgTemplate = await PageGroupTemplate.findOne({ name }).populate('dataBlockTemplate')
+    if (!pgTemplate) {
+        const dbt = new DataBlockTemplate({
+            name,
+            structure: template.data,
+            templateType: 'PAGE_GROUP'
+        })
+        await dbt.save()
+        const pgt = new PageGroupTemplate({
+            name,
+            pageGroupStructure: template.structure,
+            dataBlockTemplate: dbt
+        })
+        await pgt.save()
         console.log(`Created PageGroupTemplate ${name}`)
         return
     }
 
-    if (JSON.stringify(data) === JSON.stringify(pageGroupTemplate.data)) {
+    const structureUpdated = (JSON.stringify(template.structure) !== JSON.stringify(pgTemplate.pageGroupStructure))
+    const dbTemplateUpdated = (JSON.stringify(template.data) !== JSON.stringify(pgTemplate.dataBlockTemplate.structure))
+
+    if (dbTemplateUpdated) {
+        const dbTemplate = pgTemplate.dataBlockTemplate
+        dbTemplate.structure = template.data
+        await dbTemplate.save()
+    }
+
+    if (structureUpdated) {
+        pgTemplate.pageGroupStructure = template.structure
+        await pgTemplate.save()
+    }
+
+    if (!dbTemplateUpdated && !structureUpdated) {
         console.log(`No change in PageGroupTemplate ${name}`)
         return
     }
 
-    try {
-        pageGroupTemplate.data = data
-        await pageGroupTemplate.save()
-        console.log(`Updated PageGroupTemplate ${name}`)
-    }
-    catch (e) {
-        console.log(`Unable to populate PageGroupTemplate ${name}`)
-    }
+    console.log(`Updated PageGroupTemplate ${name}`)
 }
 
 const loadPageGroupTemplates = async (dir) => {
     const fileNames = getFileList(dir, 'json')
     fileNames.forEach(async (fileName) => {
         const data = require(path.join(dir, `${fileName}.json`))
-        await setPageGroupTemplateData(name, data)
+        await setPageGroupTemplateData(fileName, data)
     })
 }
 
 const run = async () => {
     await loadPageTemplates(pageTemplateDir)
-    // await loadPageGroupTemplates(pageGroupTemplateDir)
+    await loadPageGroupTemplates(pageGroupTemplateDir)
 }
 
 run()

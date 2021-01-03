@@ -9,14 +9,16 @@
         "content_title": "text",
         "content": "richtext",
         "button_id": {
-            "content_type": "text",
+            "contentType": "text",
             "auto_generate_unique": true,
             "hidden": true
         }
     },
     "additional_tabs": {
         "_meta": {
-            "quantity": -1,
+            "quantity": {
+                "min": 0
+            },
             "title": "title"
         },
         "button_title": "text",

@@ -19,8 +19,6 @@ const entityOpts = [
 ]
 
 const CreateEntityControl = (props) => {
-
-    // console.log(props.pageTemplates)
     const pageTemplateOpts = props.pageTemplates.map((template) => {
         return {
             value: template._id,
@@ -34,6 +32,12 @@ const CreateEntityControl = (props) => {
             label: 'None'
         }
     ]
+    props.pgTemplates.forEach((pgTemplate) => {
+        pgTemplateOpts.push({
+            value: pgTemplate._id,
+            label: pgTemplate.name
+        })
+    })
 
     const [state, setState] = useState({
         entityType: entityOpts[0],
@@ -43,14 +47,12 @@ const CreateEntityControl = (props) => {
     })
 
     function handleChange(key, value) {
-        console.log(value)
         const newState = {...state}
         newState[key] = value
 
         // Reset the state and change template options if the entityType
         // changes.
         if (key === 'entityType') {
-            console.log('entityType change', value)
             if (value.id === 'PAGE') {
                 newState.template = pageTemplateOpts[0]
             }
@@ -68,7 +70,7 @@ const CreateEntityControl = (props) => {
             const opts = {
                 name: state.name,
                 template: state.template.value,
-                parentGroup: props.parentGroup._id
+                parentGroup: props.currentPageGroup._id
             }
             api.post('/page', opts)
                 .then((response) => {
@@ -84,7 +86,7 @@ const CreateEntityControl = (props) => {
         else {
             const opts = {
                 name: state.name,
-                parentGroup: props.parentGroup._id
+                parentGroup: props.currentPageGroup._id
             }
             if (state.template.value) {
                 opts.template = state.template.value
@@ -118,6 +120,7 @@ const CreateEntityControl = (props) => {
                 entityType={state.entityType}
                 onChange={(key, val) => handleChange(key, val)}
                 onSubmit={handleSubmit}
+                currentPageGroup={props.currentPageGroup}
             />
         </Control>
     )
@@ -131,11 +134,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addPageGroup: (pageGroup) => dispatch(actions.addPageGroup(pageGroup)),
-        addPage: (page) => dispatch(actions.addPage(page))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateEntityControl)
+export default connect(mapStateToProps)(CreateEntityControl)

@@ -31,11 +31,24 @@ pageSchema.statics.allowedUpdates = () => {
     return ['name', 'active']
 }
 
+pageSchema.statics.withPath = function(query) {
+    const newQuery = query.populate({
+        path: 'parentGroup',
+        model: 'PageGroup',
+        populate: {
+            path: 'path',
+            model: 'PageGroup',
+            select: '_id name'
+        }
+    })
+    return newQuery
+}
+
 pageSchema.methods.performValidation = async function () {
     const err = new Error('bad request')
     err.status = 400
 
-    if (this.isModified('template')) {
+    if (this.isModified('template') && !this.populated('template')) {
         const templateExists = await DataBlockTemplate.exists({ _id: this.template })
         if (!templateExists) {
             err.message = `Template with id ${this.template.toString()} does not exist`
@@ -44,7 +57,7 @@ pageSchema.methods.performValidation = async function () {
     }
 
     if (this.isModified('parentGroup')) {
-        if (this.parentGroup) {
+        if (this.parentGroup && !this.populated('parentGroup')) {
             const parentGroupExists = await PageGroup.exists({ _id: this.parentGroup })
             if (!parentGroupExists) {
                 err.message = `PageGroup with id ${this.parentGroup.toString()} does not exist`

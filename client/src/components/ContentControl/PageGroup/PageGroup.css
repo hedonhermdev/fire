@@ -1,6 +1,17 @@
+.PageGroup__wrapper {
+    display: flex;
+    /* background-color: aqua; */
+    height: 100%;
+    padding-left: 50px;
+}
+
 .PageGroup {
+    height: 100%;
     min-height: 900px;
     padding-top: 15px;
+    /* background-color: green; */
+    flex: 1 1 auto;
+    box-sizing: border-box;
     /* position: relative; */
 }
 

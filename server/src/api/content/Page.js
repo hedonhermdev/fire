@@ -4,21 +4,23 @@ const DataBlock = require('../../models/DataBlock')
 const DataBlockTemplate = require('../../models/DataBlockTemplate')
 
 const getPage = async (req, res) => {
-    const page = await Page.findById(req.params.id).populate({
-        path: 'dataBlock',
-        select: 'data template',
-        populate: {
-            path: 'template',
-            select: 'structure'
-        }
-    })
+    const page = await Page.withPath(
+        Page.findById(req.params.id).populate({
+            path: 'dataBlock',
+            select: 'data template',
+            populate: {
+                path: 'template',
+                select: 'structure'
+            }
+        })
+    )
+    
     if (!page) {
         return res.status(404).send({
             message: `Page with id ${req.params.id} does not exist`
         })
     }
 
-    console.log(page.data)
     return res.status(200).send(page)
 }
 
@@ -34,7 +36,7 @@ const createPage = async (req, res) => {
 
     try {
         const page = new Page(args)
-        await page.populate('parentGroup').execPopulate()
+        await Page.withPath(page).execPopulate()
         const parentGroup = page.parentGroup
         
         page.url = await page.getUrl()
@@ -70,7 +72,7 @@ const modifyPage = async (req, res) => {
     }
 
     try {
-        const page = await Page.findById(req.params.id)
+        const page = await Page.withPath(Page.findById(req.params.id))
         updates.forEach((update) => {
             page[update] = req.body[update]
         })
@@ -111,10 +113,9 @@ const deletePage = async (req, res) => {
 
 const updateData = async (req, res) => {
     try {
-        const page = await Page.findById(req.params.id).populate('dataBlock')
+        const page = await Page.withPath(Page.findById(req.params.id).populate('dataBlock'))
         const dataBlock = page.dataBlock
         dataBlock.data = req.body.data
-        console.log(req.body)
         await dataBlock.save()
         return res.status(200).send(page)
     } catch (e) {

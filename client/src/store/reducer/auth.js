@@ -5,22 +5,20 @@ const initialState = {
     error: null,
     user: null,
     token: '',
-    isAuthenticated: false
+    isAuthenticated: true
 }
 
 const setUser = (state, action) => {
     localStorage.setItem('token', action.token)
     localStorage.setItem('username', action.username)
 
-    console.log(action)
-    console.log('bruh')
-
     return {
         ...state,
         loading: false,
         error: null,
         user: action.user,
-        token: action.token
+        token: action.token,
+        isAuthenticated: true
     }
 }
 
@@ -32,12 +30,12 @@ const unsetUser = (state, action) => {
         ...state,
         user: null,
         token: '',
-        loading: false
+        loading: false,
+        isAuthenticated: false
     }
 }
 
 const loginStart = (state, action) => {
-    console.log('loginstart')
     return {
         ...state,
         loading: true

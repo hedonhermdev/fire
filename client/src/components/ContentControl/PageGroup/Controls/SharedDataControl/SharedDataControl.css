@@ -1,22 +1,4 @@
-.Page__wrapper {
-    /* background-color: green; */
-    display: flex;
-    /* height: 100%; */
-    padding-left: 50px;
-}
-
-.Page {
-    flex: 1 1 auto;
-    height: 1000px;
-    padding-top: 15px;
-    box-sizing: border-box;
-}
-
-.Page__editForm {
-    overflow-y: auto;
-}
-
-.Page__saveBtn {
+.SharedDataControl__saveBtn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,6 +19,6 @@
     -webkit-user-select: none;
 }
 
-.Page__saveBtn:active {
+.SharedDataControl__saveBtn:active {
     transform: translateY(4px);
 }

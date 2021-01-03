@@ -26,9 +26,9 @@ export const loadMeta = () => {
         dispatch(loadMetaStart())
         
         const pageTemplates = api.get('/template/page')
-        const pgTemplates = api.get('template/pageGroup')
+        const pgTemplates = api.get('/pageGroup/template')
 
-        Promise.all([pageTemplates], [pgTemplates])
+        Promise.all([pageTemplates, pgTemplates])
             .then((vals) => {
                 dispatch(loadMetaSuccess({
                     pageTemplates: vals[0].data,

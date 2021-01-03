@@ -12,7 +12,8 @@ const initialState = {
         pages: [],
         _id: '',
         name: '',
-        baseUrl: ''
+        baseUrl: '',
+        dataBlock: null
     },
     page: {
         _id: '',
@@ -38,6 +39,7 @@ const openEntityFail = (state, action) => {
 }
 
 const setContent = (state, action) => {
+    console.log(action)
     let updateObj = {}
     if (action.entityType === 'PAGE') {
         updateObj = {
@@ -54,7 +56,8 @@ const setContent = (state, action) => {
             name: {$set: action.data.name},
             pageGroups: {$set: action.data.pageGroups},
             pages: {$set: action.data.pages},
-            baseUrl: {$set: action.data.baseUrl}
+            baseUrl: {$set: action.data.baseUrl},
+            dataBlock: {$set: action.data.dataBlock}
         }
     }
     const newState = update(state, {
