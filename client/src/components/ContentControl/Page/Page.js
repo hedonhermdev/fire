@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import update from 'immutability-helper'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -11,6 +11,19 @@ import './Page.css'
 import ControlBar from '../../ControlBar/ControlBar'
 import BreadCrumb from '../BreadCrumb/BreadCrumb'
 
+import { generateFormObject, generateFormData } from '../DataBlockEditForm/helpers'
+
+function getFormObject(dataBlock) {
+    if (!dataBlock || !dataBlock.data) {
+        return null
+    }
+    if (!dataBlock.template || !dataBlock.template.structure) {
+        return null
+    }
+
+    return generateFormObject(dataBlock.data, dataBlock.template.structure)
+}
+
 const Page = (props) => {
     const { id } = useParams()
 
@@ -22,19 +35,22 @@ const Page = (props) => {
             name: '',
             url: '',
             dataBlock: null
-        }
+        },
+        formState: null
     })
 
     useEffect(() => {
         setState({...state, loading: true})
         api.get(`/page/${id}`)
             .then((response) => {
+                const page = response.data
+                const formState = getFormObject(page.dataBlock)
                 setState({
                     ...state,
                     loading: false,
-                    page: response.data
+                    page: response.data,
+                    formState: formState
                 })
-                console.log('PATH', response.data)
                 const { parentGroup } = response.data
                 const path = parentGroup.path.concat({
                     name: parentGroup.name,
@@ -48,7 +64,8 @@ const Page = (props) => {
             })
     }, [id])
 
-    function handleSave(data) {
+    function handleSave(formState) {
+        const data = generateFormData(formState, state.page.dataBlock.template.structure)
         api.post(`/page/updateData/${state.page._id}`, {data})
             .then((response) => {
                 setState(update(state, {
@@ -64,6 +81,12 @@ const Page = (props) => {
             })
     }
 
+    function handleFormStateUpdate(newFormState) {
+        setState(update(state, {
+            formState: {$set: newFormState}
+        }))
+    }
+
     let comp = (
         <div>
             Loading...
@@ -73,11 +96,19 @@ const Page = (props) => {
     if (!state.loading) {
         const { page } = state
         comp = (
+            <Fragment>
                 <DataBlockEditForm
-                    data={page.dataBlock.data}
-                    template={page.dataBlock.template.structure}
-                    onSave={handleSave}
+                    formState={state.formState}
+                    onUpdate={(formState) => handleFormStateUpdate(formState)}
+                    template={state.page.dataBlock.template.structure}
                 />
+                <div
+                    className='Page__saveBtn'
+                    onClick={() => handleSave(state.formState)}
+                >
+                    Save
+                </div>
+            </Fragment>
             
         )
     }
