@@ -1,13 +1,17 @@
 .Page__wrapper {
     /* background-color: green; */
     display: flex;
-    height: 100%;
+    /* height: 100%; */
     padding-left: 50px;
 }
 
 .Page {
     flex: 1 1 auto;
-    height: 100%;
+    height: 1000px;
     padding-top: 15px;
     box-sizing: border-box;
+}
+
+.Page__editForm {
+    overflow-y: auto;
 }

@@ -86,7 +86,9 @@ const Page = (props) => {
         <div className='Page__wrapper'>
             <div className="Page">
                 <BreadCrumb/>
-                {comp}
+                <div className='Page__editForm'>
+                    {comp}
+                </div>
             </div>
 
             <ControlBar>

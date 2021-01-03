@@ -1,14 +1,25 @@
+.SideNav__wrapper {
+    /* height: auto; */
+    height: 100%;
+    background-color: green;
+    align-self: flex-start;
+}
+
 .SideNav {
+    /* position: fixed;
+    top: 0; */
     background-color: var(--entity-color);
     min-width: 350px;
     padding-left: 30px;
     padding-right: 30px;
+    padding-top: 15px;
     box-sizing: border-box;
     box-shadow: var(--light-shadow);
+    height: 100%;
 }
 
 .SideNav__title {
-    margin-top: 15px;
+    /* margin-top: 15px; */
     font-size: var(--text-l);
     font-weight: var(--fontweight-bold);
     color: var(--primary);
