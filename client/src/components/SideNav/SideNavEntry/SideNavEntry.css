@@ -13,9 +13,10 @@
     color: var(--light-gray);
     font-weight: var(--fontweight-medium);
     margin-bottom: 5px;
+    text-decoration: none;
 }
 
-.SideNavEntry.Active {
+.SideNavEntry.Selected {
     background-color: var(--highlight);
     color: var(--primary);
 }

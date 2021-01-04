@@ -1,12 +1,15 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 import  './SideNavEntry.css'
 
 const SideNavEntry = (props) => {
     return (
-        <div
-            className={`SideNavEntry ${props.active ? 'Active' : ''}`}
+        <NavLink
+            className={`SideNavEntry`}
             onClick={props.onClick}
+            to={props.link}
+            activeClassName='Selected'
         >
             <div className='SideNavEntry__icon'>
                 {props.icon}
@@ -14,7 +17,7 @@ const SideNavEntry = (props) => {
             <div className='SideNavEntry__label'>
                 {props.label}
             </div>
-        </div>
+        </NavLink>
     )
 }
 

@@ -4,7 +4,8 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
     breadCrumb: [],
-    currentEntityName: ''
+    currentEntityName: '',
+    currentScreen: 'CONTENT'
 }
 
 function updateBreadCrumb(state, action) {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import {
     MdHome,
     MdWeb,
@@ -23,14 +24,19 @@ const SideNav = (props) => {
                 <div className='SideNav__fastTravel'>
                     <input/>
                 </div>
-                <div className='SideNav__viewSite'>
+
+                <NavLink
+                    className='SideNav__viewSite'
+                    to='/site'
+                    activeClassName='Selected'
+                >
                     <div className='SideNav__viewSite__icon'>
                         <MdHome/>
                     </div>
                     <div className='SideNav__viewSite__label'>
                         View Site
                     </div>
-                </div>
+                </NavLink>
     
                 <div className='SideNav__sectionLabel'>
                     MANAGE
@@ -39,17 +45,20 @@ const SideNav = (props) => {
                 <SideNavEntry
                     icon={<MdWeb/>}
                     label='Content'
+                    link='/content'
                     active
                 />
     
                 <SideNavEntry
                     icon={<MdCollections/>}
                     label='Files'
+                    link='/files'
                 />
     
                 <SideNavEntry
                     icon={<MdPeople/>}
                     label='Staff'
+                    link='/staff'
                 />
     
                 <div className='SideNav__sectionLabel'>
@@ -59,16 +68,19 @@ const SideNav = (props) => {
                 <SideNavEntry
                     icon={<MdContentPaste/>}
                     label='Templates'
+                    link='/templates'
                 />
     
                 <SideNavEntry
                     icon={<MdLock/>}
                     label='Permissions'
+                    link='/permissions'
                 />
     
                 <SideNavEntry
                     icon={<MdCloudDone/>}
                     label='Backups'
+                    link='/backups'
                 />
             </div>
         </div>

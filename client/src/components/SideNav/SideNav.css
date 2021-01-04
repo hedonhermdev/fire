@@ -6,8 +6,6 @@
 }
 
 .SideNav {
-    /* position: fixed;
-    top: 0; */
     background-color: var(--entity-color);
     min-width: 350px;
     padding-left: 30px;
@@ -55,6 +53,12 @@
     color: var(--light-gray);
     cursor: pointer;
     transition: color 0.2s ease, background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.SideNav__viewSite.Selected {
+    background-color: var(--highlight);
+    color: var(--primary);
 }
 
 .SideNav__viewSite__icon {
