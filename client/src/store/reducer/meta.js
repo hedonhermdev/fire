@@ -5,7 +5,8 @@ const initialState = {
     loading: true,
     error: null,
     pageTemplates: [],
-    pgTemplates: []
+    pgTemplates: [],
+    rootPageGroup: null
 }
 
 const loadMetaStart = (state, action) => {
@@ -25,6 +26,7 @@ const loadMetaSuccess = (state, action) => {
     return update(state, {
         pageTemplates: {$set: action.pageTemplates},
         pgTemplates: {$set: action.pgTemplates},
+        rootPageGroup: {$set: action.rootPageGroup},
         loading: {$set: false}
     })
 }

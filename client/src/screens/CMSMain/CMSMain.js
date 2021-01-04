@@ -15,12 +15,13 @@ import './CMSMain.css'
 const CMSMain = (props) => {
     const location = useLocation()
     // Load the root PageGroup for the user
-    useEffect(() => {
-        if (props.token) {
-            props.loadRootNav()
-        }
-    }, [props.token])
+    // useEffect(() => {
+    //     if (props.token) {
+    //         props.loadRootNav()
+    //     }
+    // }, [props.token])
 
+    console.log(props.rootPageGroup)
     return (
         <div className='CMSMain'>
             <SideNav/>
@@ -33,16 +34,31 @@ const CMSMain = (props) => {
                 )
 
                 :   (
-                    <Route
-                        path={`/content`}
-                        render={() => (
-                            <div className="MainArea">
-                                <div className='MainArea__contentWrapper'>
-                                    <ContentControl/>
+                    <Fragment>
+
+                        <Route
+                            path='/'
+                            exact
+                            render={() => <Redirect to={`/content/pageGroup/${props.rootPageGroup._id}`}/>}
+                        />
+
+                        <Route
+                            path='/content'
+                            exact
+                            render={() => <Redirect to={`/content/pageGroup/${props.rootPageGroup._id}`}/>}
+                        />
+    
+                        <Route
+                            path={`/content`}
+                            render={() => (
+                                <div className="MainArea">
+                                    <div className='MainArea__contentWrapper'>
+                                        <ContentControl/>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    />
+                            )}
+                        />
+                    </Fragment>
                 )
             }
         </div>
@@ -52,7 +68,8 @@ const CMSMain = (props) => {
 const mapStateToProps = (state) => {
     return {
         token: state.auth.token,
-        metaLoading: state.meta.loading
+        metaLoading: state.meta.loading,
+        rootPageGroup: state.meta.rootPageGroup
     }
 }
 

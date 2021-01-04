@@ -17,24 +17,17 @@ const App = (props) => {
   useEffect(() => {
     if (token) {
       props.setUser({ username, token })
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    
+      // Loading all metadata needed for CMS functioning.
+      // TODO: Move to a separate function?
+      props.loadMeta()
     }
     else {
+      api.defaults.headers.common['Authorization'] = null
       props.unsetUser()
     }
   }, [])
-
-
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    
-    // Loading all metadata needed for CMS functioning.
-    // TODO: Move to a separate function?
-    props.loadMeta()
-    
-  }
-  else {
-    api.defaults.headers.common['Authorization'] = null
-  }
 
   return (
     <div className='App'>
