@@ -12,6 +12,10 @@ const pageGroupRouter = require('./api/content/PageGroup')
 const dataBlockRouter = require('./api/content/DataBlock')
 const dataBlockTemplateRouter = require('./api/content/DataBlockTemplate')
 const userRouter = require('./api/auth/User')
+const fileUploadRouter = require('./api/fileupload/api')
+
+// IMPORT MIDDLEWARE
+const authMiddleware = require('./middleware/auth');
 
 
 // SETUP LOGGING MIDDLEWARE
@@ -24,7 +28,6 @@ const loggerMiddleware = (req, res, next) => {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 app.use(loggerMiddleware);
 
 app.use('/page', pageRouter)
@@ -32,5 +35,6 @@ app.use('/pageGroup', pageGroupRouter)
 app.use('/dataBlock', dataBlockRouter)
 app.use('/template', dataBlockTemplateRouter)
 app.use('/user', userRouter)
+app.use('/file', fileUploadRouter)
 
 module.exports = app;

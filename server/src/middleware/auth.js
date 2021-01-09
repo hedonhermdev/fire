@@ -4,6 +4,7 @@ const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         const user = await User.findByToken(token)
+        console.log(user)
 
         if (!user) {
             throw new Error()
@@ -17,6 +18,7 @@ const auth = async (req, res, next) => {
         res.status(401).send({
             message: 'Please authenticate first'
         })
+        console.log(e)
     }
 }
 
