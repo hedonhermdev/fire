@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1.0",
+    "@aws-sdk/s3-request-presigner": "^3.1.0",
+    "@aws-sdk/util-create-request": "^3.1.0",
+    "@aws-sdk/util-format-url": "^3.1.0",
     "bcrypt": "^5.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
