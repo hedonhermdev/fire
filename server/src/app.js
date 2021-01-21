@@ -13,6 +13,7 @@ const dataBlockRouter = require('./api/content/DataBlock')
 const dataBlockTemplateRouter = require('./api/content/DataBlockTemplate')
 const userRouter = require('./api/auth/User')
 const fileUploadRouter = require('./api/fileupload/api')
+const roleRouter = require('./api/auth/Role')
 
 // IMPORT MIDDLEWARE
 const authMiddleware = require('./middleware/auth');
@@ -36,5 +37,6 @@ app.use('/dataBlock', dataBlockRouter)
 app.use('/template', dataBlockTemplateRouter)
 app.use('/user', userRouter)
 app.use('/file', fileUploadRouter)
+app.use('/role', roleRouter)
 
 module.exports = app;

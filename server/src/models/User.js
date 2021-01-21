@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const Page = require('./Page')
+const PageGroup = require('./PageGroup')
+const Role = require('./Role')
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -18,7 +22,11 @@ const userSchema = new mongoose.Schema({
     },
     tokens: [{
         type: String
-    }]
+    }],
+    roles: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role'
+    }],
 })
 
 userSchema.methods.generateAuthToken = function() {
@@ -56,6 +64,33 @@ userSchema.statics.findByToken = async function(token) {
 
     return user
 }
+
+userSchema.methods.hasAccessTo = async function hasAccessTo(objectType, objectId, action) {
+    let object;
+
+    switch (objectType) {
+        case "page":
+            object = Page.findOne({ objectId })
+        case "pageGroup":
+            object = PageGroup.findOne({ object })
+        case "user":
+            object = User.findOne({ object })
+    }
+
+    const roles = this.roles.filter((role) => role)
+
+    const roleAllowsAccess = async (role) => await role.allowsAccessToAction(object, action)
+
+    const hasAccess = roles.some(roleAllowsAccess)
+
+    // Check parents for access
+    if (!hasAccess && object.parentGroup) {
+        return hasAccessTo("PageGroup", object.parentGroup.id, action)
+    }
+
+    return hasAccess
+}
+
 
 userSchema.pre('save', async function(next) {
     if (this.isModified('password')) {

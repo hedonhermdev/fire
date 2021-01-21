@@ -20,6 +20,7 @@ const getRoot = async (req, res) => {
 }
 
 const getPageGroup = async (req, res) => {
+    console.log(await req.user.hasAccessTo(req.params.id))
     const pageGroup = await PageGroup.withPopulatedData(
         PageGroup.findById(req.params.id)
     )

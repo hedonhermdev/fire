@@ -51,7 +51,6 @@ const logout = async (req, res) => {
     }
 }
 
-
 const router = new express.Router()
 router.post('/signup', signup)
 router.post('/login', login)
