@@ -22,10 +22,44 @@ const createFile = async (req, res) => {
     const { filename } = req.body
 
     let user = req.user
-    if (user == null) {
-        user = { username: "AnonymousUser" }
+
+    if (!filename) {
+        return res.status(400).send({
+            message:
+                'Missing fields in request body. You need to provide the "filename"',
+        })
     }
-    console.log("User", user)
+
+    const key = user.username + "/" + filename
+    const url = BASE_URL + key
+
+    let signedUrl
+    try {
+        signedUrl = await FileUploadBackend.getPresignedUrl(key)
+    } catch (e) {
+        const status = e.status || 500
+        return response.status(status).send(e)
+    }
+
+    let file
+    try {
+        file = new File({
+            owner: user.id,
+            filename: filename,
+            key: key,
+            url: url,
+        })
+        await file.save()
+    } catch (e) {
+        const status = e.status || 500
+        return response.status(status).send(e)
+    }
+
+    return res.status(201).send({ file: file, signedUrl: signedUrl })
+}
+
+const createFileAnonymous = async (req, res) => {
+    const user = {username: 'AnonymousUser'}
 
     if (!filename) {
         return res.status(400).send({
@@ -107,7 +141,8 @@ const confirmFile = async (req, res) => {
 
 const router = new express.Router()
 
-router.post("/", auth, createFile)
+router.post("/create", auth, createFile)
+router.post("/createAnon", createFileAnonymous)
 router.delete("/:id", auth, deleteFile)
 router.get("/:id", auth, confirmFile)
 
